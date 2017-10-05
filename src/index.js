@@ -56,9 +56,16 @@ class Routes {
     const {pathname, query} = parsedUrl
 
     return this.routes.reduce((result, route) => {
-      if (result.route) return result
+      if (result.route) {
+        return result
+      }
+
       const params = route.match(pathname)
-      if (!params) return result
+
+      if (!params) {
+        return result
+      }
+
       return {...result, route, params, query: {...query, ...params}}
     }, {query, parsedUrl})
   }
@@ -128,7 +135,7 @@ class Route {
     this.name = name
     this.locale = locale
     this.pattern = name === 'homepage' ? '' : (pattern || `/${name}`)
-    this.page = page.replace(/(^|\/)index/, '').replace(/^\/?/, '/')
+    this.page = page.replace(/(^|\/)homepage/, '').replace(/^\/?/, '/')
     this.regex = pathToRegexp(this.pattern, this.keys = [])
     this.keyNames = this.keys.map(key => key.name)
     this.toPath = pathToRegexp.compile(this.pattern)
