@@ -71,6 +71,7 @@ class Routes {
   }
 
   findAndGetUrls (name, locale, params) {
+    locale = locale || this.locale
     const route = this.findByName(name, locale)
 
     if (route) {
@@ -116,7 +117,7 @@ class Routes {
   }
 
   getRouter (Router) {
-    const wrap = method => (route, locale, params, options) => {
+    const wrap = method => (route, params, locale, options) => {
       const {byName, urls: {as, href}} = this.findAndGetUrls(route, locale, params)
       return Router[method](href, as, byName ? options : params)
     }

@@ -147,8 +147,8 @@ export default class Blog extends React.Component {
   handleClick () {
     // With route name and params
     Router.pushRoute('blog', {slug: 'hello-world'})
-    // With route URL
-    Router.pushRoute('/blog/hello-world')
+    // With route name and params and explicit locale
+    Router.pushRoute('blog', {slug: 'hello-world'}, 'en')
   }
   render () {
     return (
@@ -163,9 +163,9 @@ export default class Blog extends React.Component {
 
 API:
 
-- `Router.pushRoute(route, locale)`
-- `Router.pushRoute(route, locale, params)`
-- `Router.pushRoute(route, locale, params, options)`
+- `Router.pushRoute(route, params)` - automatically get current locale
+- `Router.pushRoute(route, params, locale)`
+- `Router.pushRoute(route, params, locale, options)`
 
 Arguments:
 
