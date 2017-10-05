@@ -163,13 +163,14 @@ export default class Blog extends React.Component {
 
 API:
 
-- `Router.pushRoute(route)`
-- `Router.pushRoute(route, params)`
-- `Router.pushRoute(route, params, options)`
+- `Router.pushRoute(route, locale)`
+- `Router.pushRoute(route, locale, params)`
+- `Router.pushRoute(route, locale, params, options)`
 
 Arguments:
 
-- `route` - Route name or URL to match
+- `route` - Route name
+- `locale` - Route locale
 - `params` - Optional parameters for named routes
 - `options` - Passed to Next.js
 
