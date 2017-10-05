@@ -111,11 +111,11 @@ import {Link} from '../routes'
 export default () => (
   <div>
     <div>Welcome to Next.js!</div>
-    <Link route='blog' params={{slug: 'hello-world'}}>
+    <Link href='blog' params={{slug: 'hello-world'}}>
       <a>Hello world</a>
     </Link>
     or
-    <Link route='blog' locale='cs' params={{slug: 'ahoj-svete'}}>
+    <Link href='blog' locale='cs' params={{slug: 'ahoj-svete'}}>
       <a>Hello world</a>
     </Link>
   </div>
@@ -124,10 +124,10 @@ export default () => (
 
 API:
 
-- `<Link route='name'>...</Link>`
-- `<Link route='name' locale='locale'>...</Link>`
-- `<Link route='name' params={params}> ... </Link>`
-- `<Link route='name' locale='locale' params={params}> ... </Link>`
+- `<Link href='name'>...</Link>`
+- `<Link href='name' locale='locale'>...</Link>`
+- `<Link href='name' params={params}> ... </Link>`
+- `<Link href='name' locale='locale' params={params}> ... </Link>`
 
 Props:
 

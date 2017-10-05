@@ -100,13 +100,15 @@ class Routes {
 
   getLink (Link) {
     const LinkRoutes = props => {
-      const {route, l, params, to, ...newProps} = props
-      const nameOrUrl = route || to
-      const locale = l || this.locale
+      const {href, locale, params, ...newProps} = props
+      const locale2 = locale || this.locale
+      const parsedUrl = parse(href)
 
-      if (nameOrUrl) {
-        Object.assign(newProps, this.findAndGetUrls(nameOrUrl, locale, params).urls)
+      if (parsedUrl.hostname !== null || href[0] === '/') {
+        return <Link {...props} />
       }
+
+      Object.assign(newProps, this.findAndGetUrls(href, locale2, params).urls)
 
       return <Link {...newProps} />
     }

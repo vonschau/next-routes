@@ -65,7 +65,7 @@ describe('Routes', () => {
     const CustomLink = () => <div />
     const CustomRouter = {}
     const {Link, Router} = nextRoutes({Link: CustomLink, Router: CustomRouter})
-    expect(renderer.render(<Link />).type).toBe(CustomLink)
+    expect(renderer.render(<Link href='/' />).type).toBe(CustomLink)
     expect(Router).toBe(CustomRouter)
   })
 })
@@ -120,11 +120,11 @@ describe('Link', () => {
 
   test('with name and params', () => {
     const {route, testLink} = setup('a', 'en', '/a/:b')
-    testLink({route: 'a', params: {b: 'b'}}, route.getUrls({b: 'b'}))
+    testLink({href: 'a', params: {b: 'b'}}, route.getUrls({b: 'b'}))
   })
 
   test('with route not found', () => {
-    setup('a', 'en').testLinkException({route: 'b'})
+    setup('a', 'en').testLinkException({href: 'b'})
   })
 })
 
