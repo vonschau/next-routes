@@ -39,8 +39,8 @@ describe('Routes', () => {
     setup('a', 'en', '/', '/b').testRoute({page: '/b'})
   })
 
-  test('page index becomes /', () => {
-    setup('index', 'en', '/').testRoute({page: '/'})
+  test('homepage becomes empty', () => {
+    setup('homepage', 'en', '').testRoute({pattern: ''})
   })
 
   test('match and merge params into query', () => {
