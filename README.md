@@ -18,7 +18,7 @@ npm install next-routes-with-locale --save
 Create `routes.js` inside your project:
 
 ```javascript
-const routes = module.exports = require('next-routes')({ locale: 'en' })
+const routes = module.exports = require('next-routes-with-locale')({ locale: 'en' })
 
 routes
 .add('about', 'en', '/about')
