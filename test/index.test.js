@@ -152,7 +152,7 @@ describe(`Router ${routerMethods.join(', ')}`, () => {
   test('with name and params', () => {
     const {route, testMethods} = setup('a', 'en', '/a/:b')
     const {as, href} = route.getUrls({b: 'b'})
-    testMethods(['a', 'en', {b: 'b'}, {}], [href, as, {}])
+    testMethods(['a', {b: 'b'}, 'en', {}], [href, as, {}])
   })
 
   test('with route not found', () => {
