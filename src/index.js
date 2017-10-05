@@ -137,6 +137,10 @@ class Route {
   match (path) {
     if (path.substring(1, this.locale.length + 1) === this.locale) {
       path = path.substring(this.locale.length + 1)
+
+      if (!path) {
+        return {}
+      }
     }
     const values = this.regex.exec(path)
     if (values) {

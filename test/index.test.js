@@ -39,13 +39,18 @@ describe('Routes', () => {
     setup('a', 'en', '/', '/b').testRoute({page: '/b'})
   })
 
-  test('homepage becomes empty', () => {
+  test('homepage becomes empty url', () => {
     setup('homepage', 'en', '').testRoute({pattern: ''})
   })
 
   test('match and merge params into query', () => {
     const routes = nextRoutes().add('a', 'en').add('b', 'en', '/b/:b').add('c', 'en')
     expect(routes.match('/en/b/b?b=x&c=c').query).toMatchObject({b: 'b', c: 'c'})
+  })
+
+  test('match homepage route', () => {
+    const {routes, route} = setupRoute('homepage', 'en')
+    expect(routes.match('/en').route).toMatchObject(route)
   })
 
   test('generate urls from params', () => {
