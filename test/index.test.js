@@ -7,7 +7,7 @@ import nextRoutes from '../dist'
 const renderer = new ReactShallowRenderer()
 
 const setupRoute = (...args) => {
-  const routes = nextRoutes().add(...args)
+  const routes = nextRoutes({locale: 'en'}).add(...args)
   const route = routes.routes[routes.routes.length - 1]
   return {routes, route}
 }
@@ -20,56 +20,40 @@ describe('Routes', () => {
   }
 
   test('add with object', () => {
-    setup({name: 'a'}).testRoute({name: 'a', pattern: '/a', page: '/a'})
-  })
-
-  test('add with name', () => {
-    setup('a').testRoute({name: 'a', pattern: '/a', page: '/a'})
+    setup({name: 'a', locale: 'en'}).testRoute({name: 'a', locale: 'en', pattern: '/a', page: '/a'})
   })
 
   test('add with name and pattern', () => {
-    setup('a', '/:a').testRoute({name: 'a', pattern: '/:a', page: '/a'})
+    setup('a', 'en', '/:a').testRoute({name: 'a', locale: 'en', pattern: '/:a', page: '/a'})
   })
 
   test('add with name, pattern and page', () => {
-    setup('a', '/:a', 'b').testRoute({name: 'a', pattern: '/:a', page: '/b'})
-  })
-
-  test('add with pattern and page', () => {
-    setup('/:a', 'b').testRoute({name: null, pattern: '/:a', page: '/b'})
-  })
-
-  test('add with only pattern throws', () => {
-    expect(() => setup('/:a')).toThrow()
+    setup('a', 'en', '/:a', 'b').testRoute({name: 'a', locale: 'en', pattern: '/:a', page: '/b'})
   })
 
   test('add with existing name throws', () => {
-    expect(() => nextRoutes().add('a').add('a')).toThrow()
-  })
-
-  test('add multiple unnamed routes', () => {
-    expect(nextRoutes().add('/a', 'a').add('/b', 'b').routes.length).toBe(2)
+    expect(() => nextRoutes().add('a', 'en').add('a', 'en')).toThrow()
   })
 
   test('page with leading slash', () => {
-    setup('a', '/', '/b').testRoute({page: '/b'})
+    setup('a', 'en', '/', '/b').testRoute({page: '/b'})
   })
 
   test('page index becomes /', () => {
-    setup('index', '/').testRoute({page: '/'})
+    setup('index', 'en', '/').testRoute({page: '/'})
   })
 
   test('match and merge params into query', () => {
-    const routes = nextRoutes().add('a').add('b', '/b/:b').add('c')
+    const routes = nextRoutes().add('a', 'en').add('b', 'en', '/b/:b').add('c', 'en')
     expect(routes.match('/b/b?b=x&c=c').query).toMatchObject({b: 'b', c: 'c'})
   })
 
   test('generate urls from params', () => {
-    const {route} = setup('a', '/a/:b/:c+')
+    const {route} = setup('a', 'en', '/a/:b/:c+')
     const params = {b: 'b', c: [1, 2], d: 'd'}
-    const expected = {as: '/a/b/1/2?d=d', href: '/a?b=b&c=1%2F2&d=d'}
+    const expected = {as: '/en/a/b/1/2?d=d', href: '/a?b=b&c=1%2F2&d=d'}
     expect(route.getUrls(params)).toEqual(expected)
-    expect(setup('a').route.getUrls()).toEqual({as: '/a', href: '/a?'})
+    expect(setup('a', 'en').route.getUrls()).toEqual({as: '/en/a', href: '/a?'})
   })
 
   test('with custom Link and Router', () => {
@@ -123,30 +107,19 @@ describe('Link', () => {
       expect(actual.type).toBe(NextLink)
       expect(actual.props).toEqual({...props, ...expected})
     }
-    return {routes, route, testLink}
+    const testLinkException = (addProps) => {
+      expect(() => renderer.render(<Link {...props} {...addProps} />)).toThrow()
+    }
+    return {routes, route, testLink, testLinkException}
   }
 
   test('with name and params', () => {
-    const {route, testLink} = setup('a', '/a/:b')
+    const {route, testLink} = setup('a', 'en', '/a/:b')
     testLink({route: 'a', params: {b: 'b'}}, route.getUrls({b: 'b'}))
   })
 
-  test('with route url', () => {
-    const {routes, route, testLink} = setup('/a/:b', 'a')
-    testLink({route: '/a/b'}, route.getUrls(routes.match('/a/b').query))
-  })
-
-  test('with to', () => {
-    const {routes, route, testLink} = setup('/a/:b', 'a')
-    testLink({to: '/a/b'}, route.getUrls(routes.match('/a/b').query))
-  })
-
   test('with route not found', () => {
-    setup('a').testLink({route: '/b'}, {href: '/b', as: '/b'})
-  })
-
-  test('without route', () => {
-    setup('a').testLink({href: '/'}, {href: '/'})
+    setup('a', 'en').testLinkException({route: 'b'})
   })
 })
 
@@ -162,23 +135,22 @@ describe(`Router ${routerMethods.join(', ')}`, () => {
         expect(Router[method]).toBeCalledWith(...expected)
       })
     }
-    return {routes, route, testMethods}
+    const testException = (args) => {
+      routerMethods.forEach(method => {
+        const Router = routes.getRouter({[method]: jest.fn()})
+        expect(() => Router[`${method}Route`](...args)).toThrow()
+      })
+    }
+    return {routes, route, testMethods, testException}
   }
 
   test('with name and params', () => {
-    const {route, testMethods} = setup('a', '/a/:b')
+    const {route, testMethods} = setup('a', 'en', '/a/:b')
     const {as, href} = route.getUrls({b: 'b'})
-    testMethods(['a', {b: 'b'}, {}], [href, as, {}])
-  })
-
-  test('with route url', () => {
-    const {routes, testMethods} = setup('/a', 'a')
-    const {route, query} = routes.match('/a')
-    const {as, href} = route.getUrls(query)
-    testMethods(['/a', {}], [href, as, {}])
+    testMethods(['a', 'en', {b: 'b'}, {}], [href, as, {}])
   })
 
   test('with route not found', () => {
-    setup('a').testMethods(['/b', {}], ['/b', '/b', {}])
+    setup('a', 'en').testException(['/b', 'en', {}])
   })
 })

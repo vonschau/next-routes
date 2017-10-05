@@ -1,6 +1,6 @@
 import pathToRegexp from 'path-to-regexp'
 import React from 'react'
-import {parse} from 'url'
+import { parse } from 'url'
 import NextLink from 'next/link'
 import NextRouter from 'next/router'
 
@@ -8,29 +8,32 @@ module.exports = opts => new Routes(opts)
 
 class Routes {
   constructor ({
-    Link = NextLink,
-    Router = NextRouter
-  } = {}) {
+                 Link = NextLink,
+                 Router = NextRouter,
+                 locale
+               } = {}) {
     this.routes = []
     this.Link = this.getLink(Link)
     this.Router = this.getRouter(Router)
+    this.locale = locale
   }
 
-  add (name, pattern, page) {
+  add (name, locale = this.locale, pattern, page) {
     let options
     if (name instanceof Object) {
       options = name
-      name = options.name
-    } else {
-      if (name[0] === '/') {
-        page = pattern
-        pattern = name
-        name = null
+
+      if (!options.name) {
+        throw new Error(`Unnamed routes not supported`)
       }
-      options = {name, pattern, page}
+
+      name = options.name
+      locale = options.locale || this.locale
+    } else {
+      options = {name, locale, pattern, page}
     }
 
-    if (this.findByName(name)) {
+    if (this.findByName(name, locale)) {
       throw new Error(`Route "${name}" already exists`)
     }
 
@@ -38,9 +41,13 @@ class Routes {
     return this
   }
 
-  findByName (name) {
+  setLocale (locale) {
+    this.locale = locale
+  }
+
+  findByName (name, locale) {
     if (name) {
-      return this.routes.filter(route => route.name === name)[0]
+      return this.routes.filter(route => route.name === name && route.locale === locale)[0]
     }
   }
 
@@ -56,16 +63,13 @@ class Routes {
     }, {query, parsedUrl})
   }
 
-  findAndGetUrls (nameOrUrl, params) {
-    const route = this.findByName(nameOrUrl)
+  findAndGetUrls (name, locale, params) {
+    const route = this.findByName(name, locale)
 
     if (route) {
       return {route, urls: route.getUrls(params), byName: true}
     } else {
-      const {route, query} = this.match(nameOrUrl)
-      const href = route ? route.getHref(query) : nameOrUrl
-      const urls = {href, as: nameOrUrl}
-      return {route, urls}
+      throw new Error(`Route "${name}" not found`)
     }
   }
 
@@ -89,11 +93,12 @@ class Routes {
 
   getLink (Link) {
     const LinkRoutes = props => {
-      const {route, params, to, ...newProps} = props
+      const {route, l, params, to, ...newProps} = props
       const nameOrUrl = route || to
+      const locale = l || this.locale
 
       if (nameOrUrl) {
-        Object.assign(newProps, this.findAndGetUrls(nameOrUrl, params).urls)
+        Object.assign(newProps, this.findAndGetUrls(nameOrUrl, locale, params).urls)
       }
 
       return <Link {...newProps} />
@@ -102,8 +107,8 @@ class Routes {
   }
 
   getRouter (Router) {
-    const wrap = method => (route, params, options) => {
-      const {byName, urls: {as, href}} = this.findAndGetUrls(route, params)
+    const wrap = method => (route, locale, params, options) => {
+      const {byName, urls: {as, href}} = this.findAndGetUrls(route, locale, params)
       return Router[method](href, as, byName ? options : params)
     }
 
@@ -115,12 +120,13 @@ class Routes {
 }
 
 class Route {
-  constructor ({name, pattern, page = name}) {
+  constructor ({name, locale, pattern, page = name}) {
     if (!name && !page) {
       throw new Error(`Missing page to render for route "${pattern}"`)
     }
 
     this.name = name
+    this.locale = locale
     this.pattern = pattern || `/${name}`
     this.page = page.replace(/(^|\/)index$/, '').replace(/^\/?/, '/')
     this.regex = pathToRegexp(this.pattern, this.keys = [])
@@ -146,7 +152,7 @@ class Route {
   }
 
   getAs (params = {}) {
-    const as = this.toPath(params)
+    const as = '/' + this.locale + this.toPath(params)
     const keys = Object.keys(params)
     const qsKeys = keys.filter(key => this.keyNames.indexOf(key) === -1)
 

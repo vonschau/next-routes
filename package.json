@@ -1,8 +1,8 @@
 {
-  "name": "next-routes",
-  "version": "1.0.40",
-  "description": "Easy to use universal dynamic routes for Next.js",
-  "repository": "fridays/next-routes",
+  "name": "next-routes-with-locale",
+  "version": "1.0.0",
+  "description": "Easy to use locale-based dynamic routes for Next.js",
+  "repository": "vonschau/next-routes-with-locale",
   "main": "dist",
   "files": [
     "dist"

@@ -1,45 +1,47 @@
-# Dynamic Routes for Next.js
+# Dynamic Routes with localization for Next.js
 
-[![npm version](https://d25lcipzij17d.cloudfront.net/badge.svg?id=js&type=6&v=1.0.40&x2=0)](https://www.npmjs.com/package/next-routes) [![Coverage Status](https://coveralls.io/repos/github/fridays/next-routes/badge.svg)](https://coveralls.io/github/fridays/next-routes) [![Build Status](https://travis-ci.org/fridays/next-routes.svg?branch=master)](https://travis-ci.org/fridays/next-routes)
+Based on [Next-Routes](https://github.com/fridays/next-routes) with these changes:
 
-Easy to use universal dynamic routes for [Next.js](https://github.com/zeit/next.js)
-
-- Express-style route and parameters matching
-- Request handler middleware for express & co
-- `Link` and `Router` that generate URLs by route definition
+- No support for unnamed routes
+- Route can be added only by name, locale and pattern (and optionally page) or options object
+- `Link` and `Router` generate URLs only by route definition (name + params)
+- URLs are prefixed with locale (ie. /en/about)
 
 ## How to use
 
 Install:
 
 ```bash
-npm install next-routes --save
+npm install next-routes-with-locale --save
 ```
 
 Create `routes.js` inside your project:
 
 ```javascript
-const routes = module.exports = require('next-routes')()
+const routes = module.exports = require('next-routes')({ locale: 'en' })
 
 routes
-.add('about')
-.add('blog', '/blog/:slug')
-.add('user', '/user/:id', 'profile')
-.add('/:noname/:lang(en|es)/:wow+', 'complex')
-.add({name: 'beta', pattern: '/v3', page: 'v3'})
+.add('about', 'en', '/about')
+.add('blog', 'en', '/blog/:slug')
+.add('user', 'en', '/user/:id', 'profile')
+.add({name: 'beta', locale: 'en', pattern: '/v3', page: 'v3'})
+.add('about', 'cs', '/o-projektu')
+.add('blog', 'cs', '/blog/:slug')
+.add('user', 'cs', '/uzivatel/:id', 'profile')
+.add({name: 'beta', locale: 'cs', pattern: '/v3', page: 'v3'})
 ```
 
 This file is used both on the server and the client.
 
 API:
 
-- `routes.add(name, pattern = /name, page = name)`
-- `routes.add(pattern, page)`
+- `routes.add(name, locale, pattern = /name, page = name)`
 - `routes.add(object)`
 
 Arguments:
 
 - `name` - Route name
+- `locale` - Locale of the route
 - `pattern` - Route pattern (like express, see [path-to-regexp](https://github.com/pillarjs/path-to-regexp))
 - `page` - Page inside `./pages` to be rendered
 
@@ -113,7 +115,7 @@ export default () => (
       <a>Hello world</a>
     </Link>
     or
-    <Link route='/blog/hello-world'>
+    <Link route='blog' locale='cs' params={{slug: 'ahoj-svete'}}>
       <a>Hello world</a>
     </Link>
   </div>
@@ -123,8 +125,9 @@ export default () => (
 API:
 
 - `<Link route='name'>...</Link>`
+- `<Link route='name' locale='locale'>...</Link>`
 - `<Link route='name' params={params}> ... </Link>`
-- `<Link route='/path/to/match'> ... </Link>`
+- `<Link route='name' locale='locale' params={params}> ... </Link>`
 
 Props:
 
