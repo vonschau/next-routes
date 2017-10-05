@@ -128,6 +128,7 @@ class Route {
     this.name = name
     this.locale = locale
     this.pattern = pattern || `/${name}`
+    console.log(this.pattern)
     this.page = page.replace(/(^|\/)index$/, '').replace(/^\/?/, '/')
     this.regex = pathToRegexp(this.pattern, this.keys = [])
     this.keyNames = this.keys.map(key => key.name)
@@ -135,6 +136,9 @@ class Route {
   }
 
   match (path) {
+    if (path.substring(1, this.locale.length + 1) === this.locale) {
+      path = path.substring(this.locale.length + 1)
+    }
     const values = this.regex.exec(path)
     if (values) {
       return this.valuesToParams(values.slice(1))
