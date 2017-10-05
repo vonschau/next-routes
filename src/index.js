@@ -105,7 +105,7 @@ class Routes {
       const locale2 = locale || this.locale
       const parsedUrl = parse(href)
 
-      if (parsedUrl.hostname !== null || href[0] === '/') {
+      if (parsedUrl.hostname !== null || href[0] === '/' || href[0] === '#') {
         return <Link {...props} />
       }
 
