@@ -1,6 +1,6 @@
 {
   "name": "next-routes-with-locale",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "Easy to use locale-based dynamic routes for Next.js",
   "repository": "vonschau/next-routes-with-locale",
   "main": "dist",
