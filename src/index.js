@@ -88,6 +88,7 @@ class Routes {
       const {route, query, parsedUrl} = this.match(req.url)
 
       if (route) {
+        req.locale = route.locale
         if (customHandler) {
           customHandler({req, res, route, query})
         } else {

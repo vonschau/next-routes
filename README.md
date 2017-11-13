@@ -80,6 +80,8 @@ app.prepare().then(() => {
 })
 ```
 
+> RequestHandler automatically sets req.locale to locale of matched route so you can use it in your app.
+
 Optionally you can pass a custom handler, for example:
 
 ```javascript

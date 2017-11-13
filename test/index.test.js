@@ -85,6 +85,16 @@ describe('Request handler', () => {
     expect(app.render).toBeCalledWith(req, res, route.page, query)
   })
 
+  test('find route and test locale is set correctly', () => {
+    const routes = nextRoutes()
+    const app = {getRequestHandler: jest.fn(), render: jest.fn()}
+    const req = {url: '/cs/test'}
+
+    routes.add('test', 'cs', '/test')
+    routes.getRequestHandler(app)(req, {})
+    expect(req.locale).toEqual('cs')
+  })
+
   test('find route and call custom handler', () => {
     const {routes, app, req, res} = setup('/en/a')
     const {route, query} = routes.add('a', 'en').match('/en/a')
