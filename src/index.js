@@ -18,7 +18,7 @@ class Routes {
     this.locale = locale
   }
 
-  add (name, locale = this.locale, pattern, page) {
+  add (name, locale = this.locale, pattern, page, data) {
     let options
     if (name instanceof Object) {
       options = name
@@ -28,15 +28,30 @@ class Routes {
       }
 
       name = options.name
+
+      if (!options.page) {
+        options.page = options.name
+      }
+
       locale = options.locale || this.locale
     } else {
+      if (typeof page === 'object') {
+        data = page
+        page = name
+      } else {
+        page = page || name
+      }
+
       options = {name, locale, pattern, page}
+
+      if (data) {
+        options.data = data
+      }
     }
 
     if (this.findByName(name, locale)) {
       throw new Error(`Route "${name}" already exists`)
     }
-
     this.routes.push(new Route(options))
     return this
   }
@@ -89,6 +104,8 @@ class Routes {
 
       if (route) {
         req.locale = route.locale
+        req.nextRoute = route.nextRoute
+
         if (customHandler) {
           customHandler({req, res, route, query})
         } else {
@@ -131,7 +148,7 @@ class Routes {
 }
 
 class Route {
-  constructor ({name, locale, pattern, page = name}) {
+  constructor ({name, locale, pattern, page, data}) {
     if (!name && !page) {
       throw new Error(`Missing page to render for route "${pattern}"`)
     }
@@ -143,6 +160,7 @@ class Route {
     this.regex = pathToRegexp(this.pattern, this.keys = [])
     this.keyNames = this.keys.map(key => key.name)
     this.toPath = pathToRegexp.compile(this.pattern)
+    this.data = data || {}
   }
 
   match (path) {

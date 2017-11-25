@@ -6,6 +6,8 @@ Based on [Next-Routes](https://github.com/fridays/next-routes) with these change
 - Route can be added only by name, locale and pattern (and optionally page) or options object
 - `Link` and `Router` generate URLs only by route definition (name + params)
 - URLs are prefixed with locale (ie. /en/about)
+- Routes can have data object (if you generate routes dynamically you can pass custom data there)
+- default RequestHandler set locale and nextRoute properties on request (you can get data with ```req.nextRoute.data```) 
 
 ## How to use
 
@@ -23,7 +25,8 @@ const routes = module.exports = require('next-routes-with-locale')({ locale: 'en
 routes
 .add('about', 'en', '/about')
 .add('blog', 'en', '/blog/:slug')
-.add('user', 'en', '/user/:id', 'profile')
+.add('blog', 'en', '/blog/:slug', {myCustom: 'data'})
+.add('user', 'en', '/user/:id', 'profile', {myCustom: 'data'})
 .add({name: 'beta', locale: 'en', pattern: '/v3', page: 'v3'})
 .add('about', 'cs', '/o-projektu')
 .add('blog', 'cs', '/blog/:slug')
@@ -35,7 +38,7 @@ This file is used both on the server and the client.
 
 API:
 
-- `routes.add(name, locale, pattern = /name, page = name)`
+- `routes.add(name, locale, pattern = /name, page = name, data)`
 - `routes.add(object)`
 
 Arguments:
@@ -43,7 +46,8 @@ Arguments:
 - `name` - Route name
 - `locale` - Locale of the route
 - `pattern` - Route pattern (like express, see [path-to-regexp](https://github.com/pillarjs/path-to-regexp))
-- `page` - Page inside `./pages` to be rendered
+- `page` - Page inside `./pages` to be rendered; can be ommited
+- `data` - Custom data object
 
 The page component receives the matched URL parameters merged into `query`
 

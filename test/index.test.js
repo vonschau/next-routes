@@ -2,7 +2,7 @@
 import React from 'react'
 import ReactShallowRenderer from 'react-test-renderer/shallow'
 import NextLink from 'next/link'
-import nextRoutes from '../dist'
+import nextRoutes from '../src'
 
 const renderer = new ReactShallowRenderer()
 
@@ -23,12 +23,34 @@ describe('Routes', () => {
     setup({name: 'a', locale: 'en'}).testRoute({name: 'a', locale: 'en', pattern: '/a', page: '/a'})
   })
 
+  test('add with object and data', () => {
+    const data = {contentItemId: 'test'}
+    setup({name: 'a', locale: 'en', data: data})
+      .testRoute({
+        name: 'a',
+        locale: 'en',
+        pattern: '/a',
+        page: '/a',
+        data: data
+      })
+  })
+
   test('add with name and pattern', () => {
     setup('a', 'en', '/:a').testRoute({name: 'a', locale: 'en', pattern: '/:a', page: '/a'})
   })
 
+  test('add with name, pattern and data', () => {
+    const data = {contentItemId: 'test'}
+    setup('a', 'en', '/:a', data).testRoute({name: 'a', locale: 'en', pattern: '/:a', page: '/a', data: data})
+  })
+
   test('add with name, pattern and page', () => {
     setup('a', 'en', '/:a', 'b').testRoute({name: 'a', locale: 'en', pattern: '/:a', page: '/b'})
+  })
+
+  test('add with name, pattern,page and data', () => {
+    const data = {contentItemId: 'test'}
+    setup('a', 'en', '/:a', 'b', data).testRoute({name: 'a', locale: 'en', pattern: '/:a', page: '/b', data: data})
   })
 
   test('add with existing name throws', () => {
