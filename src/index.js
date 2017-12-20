@@ -60,6 +60,10 @@ class Routes {
     this.locale = locale
   }
 
+  setRoutes (routes) {
+    this.routes = routes
+  }
+
   findByName (name, locale) {
     if (name) {
       return this.routes.filter(route => route.name === name && route.locale === locale)[0]
