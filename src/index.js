@@ -61,7 +61,15 @@ class Routes {
   }
 
   setRoutes (routes) {
-    this.routes = routes
+    if (Array.isArray(routes)) {
+      routes.forEach(route => {
+        this.add(route.name, route.locale, route.pattern, route.page, route.data)
+      })
+    } else if (typeof routes === 'object') {
+      this.add(routes.name, routes.locale, routes.pattern, routes.page, routes.data)
+    } else {
+      throw new Error('Data passed to setRoutes is neither an array nor an object')
+    }
   }
 
   findByName (name, locale) {
