@@ -138,7 +138,17 @@ class Routes {
       const parsedUrl = parse(href)
 
       if (parsedUrl.hostname !== null || href[0] === '/' || href[0] === '#') {
-        return <Link {...props} />
+        let propsToPass
+        if (Link.propTypes) {
+          const allowedKeys = Object.keys(Link.propTypes)
+          propsToPass = allowedKeys.reduce((obj, key) => {
+            props.hasOwnProperty(key) && (obj[key] = props[key])
+            return obj
+          }, {})
+        } else {
+          propsToPass = props
+        }
+        return <Link {...propsToPass} />
       }
 
       Object.assign(newProps, this.findAndGetUrls(href, locale2, params).urls)
