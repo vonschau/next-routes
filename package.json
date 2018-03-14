@@ -10,12 +10,13 @@
   "scripts": {
     "lint": "standard 'src/*' 'test/*'",
     "build": "del dist/* && babel src -d dist",
-    "prepublishOnly": "npm run test",
+    "prepublishOnly": "yarn test",
     "pretest": "npm run lint && npm run build",
-    "test": "npm run testOnly",
+    "test": "yarn testOnly",
     "testOnly": "jest \\.test.js --coverage",
-    "testCI": "npm run test && cat coverage/lcov.info | coveralls",
-    "dev": "concurrently -k 'npm run build -- -w' 'npm run testOnly -- --watch'"
+    "testCI": "yarn test && cat coverage/lcov.info | coveralls",
+    "testWatch": "yarn test --watch",
+    "dev": "concurrently -k 'npm run build -- -w' 'yarn testOnly -- --watch'"
   },
   "standard": {
     "parser": "babel-eslint"

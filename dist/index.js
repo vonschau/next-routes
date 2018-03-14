@@ -262,13 +262,16 @@ var Routes = function () {
 
       var wrap = function wrap(method) {
         return function (route, params, locale, options) {
-          var _findAndGetUrls = _this4.findAndGetUrls(route, locale, params),
+          var locale2 = typeof locale === 'string' ? locale : _this4.locale;
+          var options2 = (typeof locale === 'undefined' ? 'undefined' : (0, _typeof3.default)(locale)) === 'object' ? locale : options;
+
+          var _findAndGetUrls = _this4.findAndGetUrls(route, locale2, params),
               byName = _findAndGetUrls.byName,
               _findAndGetUrls$urls = _findAndGetUrls.urls,
               as = _findAndGetUrls$urls.as,
               href = _findAndGetUrls$urls.href;
 
-          return Router[method](href, as, byName ? options : params);
+          return Router[method](href, as, byName ? options2 : params);
         };
       };
 

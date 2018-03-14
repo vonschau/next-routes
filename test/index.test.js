@@ -192,6 +192,12 @@ describe(`Router ${routerMethods.join(', ')}`, () => {
     testMethods(['a', {b: 'b'}, 'en', {}], [href, as, {}])
   })
 
+  test('with options and without locale', () => {
+    const {route, testMethods} = setup('a', 'en', '/a/:b')
+    const {as, href} = route.getUrls({b: 'b'})
+    testMethods(['a', {b: 'b'}, { shallow: true }], [href, as, { shallow: true }])
+  })
+
   test('with route not found', () => {
     setup('a', 'en').testException(['/b', 'en', {}])
   })

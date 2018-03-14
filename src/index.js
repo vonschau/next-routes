@@ -160,8 +160,11 @@ class Routes {
 
   getRouter (Router) {
     const wrap = method => (route, params, locale, options) => {
-      const {byName, urls: {as, href}} = this.findAndGetUrls(route, locale, params)
-      return Router[method](href, as, byName ? options : params)
+      const locale2 = typeof locale === 'string' ? locale : this.locale
+      const options2 = typeof locale === 'object' ? locale : options
+
+      const {byName, urls: {as, href}} = this.findAndGetUrls(route, locale2, params)
+      return Router[method](href, as, byName ? options2 : params)
     }
 
     Router.pushRoute = wrap('push')
