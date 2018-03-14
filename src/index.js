@@ -8,10 +8,10 @@ module.exports = opts => new Routes(opts)
 
 class Routes {
   constructor ({
-                 Link = NextLink,
-                 Router = NextRouter,
-                 locale
-               } = {}) {
+    Link = NextLink,
+    Router = NextRouter,
+    locale
+  } = {}) {
     this.routes = []
     this.Link = this.getLink(Link)
     this.Router = this.getRouter(Router)
@@ -212,7 +212,7 @@ class Route {
   }
 
   getAs (params = {}) {
-    const as = '/' + this.locale + this.toPath(params)
+    const as = this.toPath(params) || '/'
     const keys = Object.keys(params)
     const qsKeys = keys.filter(key => this.keyNames.indexOf(key) === -1)
 

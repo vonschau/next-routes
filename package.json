@@ -27,7 +27,7 @@
     ]
   },
   "dependencies": {
-    "path-to-regexp": "^1.7.0"
+    "path-to-regexp": "^2.2.0"
   },
   "peerDependencies": {
     "next": "^4.1.4",
@@ -35,18 +35,18 @@
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
-    "babel-eslint": "^7.2.3",
-    "babel-jest": "^20.0.3",
-    "babel-preset-env": "^1.5.2",
-    "concurrently": "^3.5.0",
-    "coveralls": "^2.13.1",
+    "babel-eslint": "^8.2.2",
+    "babel-jest": "^22.4.1",
+    "babel-preset-env": "^1.6.1",
+    "concurrently": "^3.5.1",
+    "coveralls": "^3.0.0",
     "del-cli": "^1.1.0",
-    "jest": "^20.0.4",
-    "next": "^4.1.4",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
-    "react-test-renderer": "^16.0.0",
-    "standard": "^10.0.2"
+    "jest": "^22.4.2",
+    "next": "^4.2.3",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-test-renderer": "^16.2.0",
+    "standard": "^11.0.0"
   },
   "author": "fridays",
   "license": "MIT",
