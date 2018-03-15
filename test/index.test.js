@@ -144,10 +144,7 @@ describe('Link', () => {
       expect(actual.type).toBe(NextLink)
       expect(actual.props).toEqual({...props, ...expected})
     }
-    const testLinkException = (addProps) => {
-      expect(() => renderer.render(<Link {...props} {...addProps} />)).toThrow()
-    }
-    return {routes, route, testLink, testLinkException}
+    return {routes, route, testLink}
   }
 
   test('with filtered params', () => {
@@ -157,11 +154,12 @@ describe('Link', () => {
 
   test('with name and params', () => {
     const {route, testLink} = setup('a', 'en', '/a/:b')
-    testLink({href: 'a', params: {b: 'b'}}, route.getUrls({b: 'b'}))
+    testLink({route: 'a', params: {b: 'b'}}, route.getUrls({b: 'b'}))
   })
 
   test('with route not found', () => {
-    setup('a', 'en').testLinkException({href: 'b'})
+    const {testLink} = setup('a', 'en')
+    testLink({href: 'b'}, {href: 'b'})
   })
 })
 
@@ -177,13 +175,7 @@ describe(`Router ${routerMethods.join(', ')}`, () => {
         expect(Router[method]).toBeCalledWith(...expected)
       })
     }
-    const testException = (args) => {
-      routerMethods.forEach(method => {
-        const Router = routes.getRouter({[method]: jest.fn()})
-        expect(() => Router[`${method}Route`](...args)).toThrow()
-      })
-    }
-    return {routes, route, testMethods, testException}
+    return {routes, route, testMethods}
   }
 
   test('with name and params', () => {
@@ -196,9 +188,5 @@ describe(`Router ${routerMethods.join(', ')}`, () => {
     const {route, testMethods} = setup('a', 'en', '/a/:b')
     const {as, href} = route.getUrls({b: 'b'})
     testMethods(['a', {b: 'b'}, { shallow: true }], [href, as, { shallow: true }])
-  })
-
-  test('with route not found', () => {
-    setup('a', 'en').testException(['/b', 'en', {}])
   })
 })

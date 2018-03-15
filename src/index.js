@@ -60,20 +60,6 @@ class Routes {
     this.locale = locale
   }
 
-  setRoutes (routes) {
-    if (Array.isArray(routes)) {
-      this.routes = []
-      routes.forEach(route => {
-        this.add(route.name, route.locale, route.pattern, route.page, route.data)
-      })
-    } else if (typeof routes === 'object') {
-      this.routes = []
-      this.add(routes.name, routes.locale, routes.pattern, routes.page, routes.data)
-    } else {
-      throw new Error('Data passed to setRoutes is neither an array nor an object')
-    }
-  }
-
   findByName (name, locale) {
     if (name) {
       return this.routes.filter(route => route.name === name && route.locale === locale)[0]
@@ -85,28 +71,24 @@ class Routes {
     const {pathname, query} = parsedUrl
 
     return this.routes.reduce((result, route) => {
-      if (result.route) {
-        return result
-      }
-
+      if (result.route) return result
       const params = route.match(pathname)
-
-      if (!params) {
-        return result
-      }
-
+      if (!params) return result
       return {...result, route, params, query: {...query, ...params}}
     }, {query, parsedUrl})
   }
 
-  findAndGetUrls (name, locale, params) {
+  findAndGetUrls (nameOrUrl, locale, params) {
     locale = locale || this.locale
-    const route = this.findByName(name, locale)
+    const route = this.findByName(nameOrUrl, locale)
 
     if (route) {
       return {route, urls: route.getUrls(params), byName: true}
     } else {
-      throw new Error(`Route "${name}" not found`)
+      const {route, query} = this.match(nameOrUrl)
+      const href = route ? route.getHref(query) : nameOrUrl
+      const urls = {href, as: nameOrUrl}
+      return {route, urls}
     }
   }
 
@@ -133,28 +115,18 @@ class Routes {
 
   getLink (Link) {
     const LinkRoutes = props => {
-      const {href, locale, params, ...newProps} = props
+      const {route, params, locale, to, ...newProps} = props
+      const nameOrUrl = route || to
+
       const locale2 = locale || this.locale
-      const parsedUrl = parse(href)
 
-      if (parsedUrl.hostname !== null || href[0] === '/' || href[0] === '#') {
-        let propsToPass
-        if (Link.propTypes) {
-          const allowedKeys = Object.keys(Link.propTypes)
-          propsToPass = allowedKeys.reduce((obj, key) => {
-            props.hasOwnProperty(key) && (obj[key] = props[key])
-            return obj
-          }, {})
-        } else {
-          propsToPass = props
-        }
-        return <Link {...propsToPass} />
+      if (nameOrUrl) {
+        Object.assign(newProps, this.findAndGetUrls(nameOrUrl, locale2, params).urls)
       }
-
-      Object.assign(newProps, this.findAndGetUrls(href, locale2, params).urls)
 
       return <Link {...newProps} />
     }
+
     return LinkRoutes
   }
 
@@ -170,6 +142,7 @@ class Routes {
     Router.pushRoute = wrap('push')
     Router.replaceRoute = wrap('replace')
     Router.prefetchRoute = wrap('prefetch')
+
     return Router
   }
 }

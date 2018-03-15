@@ -1,5 +1,9 @@
 'use strict';
 
+var _keys = require('babel-runtime/core-js/object/keys');
+
+var _keys2 = _interopRequireDefault(_keys);
+
 var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
 
 var _defineProperty3 = _interopRequireDefault(_defineProperty2);
@@ -7,10 +11,6 @@ var _defineProperty3 = _interopRequireDefault(_defineProperty2);
 var _assign = require('babel-runtime/core-js/object/assign');
 
 var _assign2 = _interopRequireDefault(_assign);
-
-var _keys = require('babel-runtime/core-js/object/keys');
-
-var _keys2 = _interopRequireDefault(_keys);
 
 var _objectWithoutProperties2 = require('babel-runtime/helpers/objectWithoutProperties');
 
@@ -125,23 +125,6 @@ var Routes = function () {
       this.locale = locale;
     }
   }, {
-    key: 'setRoutes',
-    value: function setRoutes(routes) {
-      var _this = this;
-
-      if (Array.isArray(routes)) {
-        this.routes = [];
-        routes.forEach(function (route) {
-          _this.add(route.name, route.locale, route.pattern, route.page, route.data);
-        });
-      } else if ((typeof routes === 'undefined' ? 'undefined' : (0, _typeof3.default)(routes)) === 'object') {
-        this.routes = [];
-        this.add(routes.name, routes.locale, routes.pattern, routes.page, routes.data);
-      } else {
-        throw new Error('Data passed to setRoutes is neither an array nor an object');
-      }
-    }
-  }, {
     key: 'findByName',
     value: function findByName(name, locale) {
       if (name) {
@@ -159,48 +142,44 @@ var Routes = function () {
 
 
       return this.routes.reduce(function (result, route) {
-        if (result.route) {
-          return result;
-        }
-
+        if (result.route) return result;
         var params = route.match(pathname);
-
-        if (!params) {
-          return result;
-        }
-
+        if (!params) return result;
         return (0, _extends3.default)({}, result, { route: route, params: params, query: (0, _extends3.default)({}, query, params) });
       }, { query: query, parsedUrl: parsedUrl });
     }
   }, {
     key: 'findAndGetUrls',
-    value: function findAndGetUrls(name, locale, params) {
+    value: function findAndGetUrls(nameOrUrl, locale, params) {
       locale = locale || this.locale;
-      var route = this.findByName(name, locale);
+      var route = this.findByName(nameOrUrl, locale);
 
       if (route) {
         return { route: route, urls: route.getUrls(params), byName: true };
       } else {
-        throw new Error('Route "' + name + '" not found');
+        var _match = this.match(nameOrUrl),
+            _route = _match.route,
+            query = _match.query;
+
+        var href = _route ? _route.getHref(query) : nameOrUrl;
+        var urls = { href: href, as: nameOrUrl };
+        return { route: _route, urls: urls };
       }
     }
   }, {
     key: 'getRequestHandler',
     value: function getRequestHandler(app, customHandler) {
-      var _this2 = this;
+      var _this = this;
 
       var nextHandler = app.getRequestHandler();
 
       return function (req, res) {
-        var _match = _this2.match(req.url),
-            route = _match.route,
-            query = _match.query,
-            parsedUrl = _match.parsedUrl;
+        var _match2 = _this.match(req.url),
+            route = _match2.route,
+            query = _match2.query,
+            parsedUrl = _match2.parsedUrl;
 
         if (route) {
-          req.locale = route.locale;
-          req.nextRoute = route.nextRoute;
-
           if (customHandler) {
             customHandler({ req: req, res: res, route: route, query: query });
           } else {
@@ -214,58 +193,44 @@ var Routes = function () {
   }, {
     key: 'getLink',
     value: function getLink(Link) {
-      var _this3 = this;
+      var _this2 = this;
 
       var LinkRoutes = function LinkRoutes(props) {
-        var href = props.href,
-            locale = props.locale,
+        var route = props.route,
             params = props.params,
-            newProps = (0, _objectWithoutProperties3.default)(props, ['href', 'locale', 'params']);
+            locale = props.locale,
+            to = props.to,
+            newProps = (0, _objectWithoutProperties3.default)(props, ['route', 'params', 'locale', 'to']);
 
-        var locale2 = locale || _this3.locale;
-        var parsedUrl = (0, _url.parse)(href);
+        var nameOrUrl = route || to;
 
-        if (parsedUrl.hostname !== null || href[0] === '/' || href[0] === '#') {
-          var propsToPass = void 0;
-          if (Link.propTypes) {
-            var allowedKeys = (0, _keys2.default)(Link.propTypes);
-            propsToPass = allowedKeys.reduce(function (obj, key) {
-              props.hasOwnProperty(key) && (obj[key] = props[key]);
-              return obj;
-            }, {});
-          } else {
-            propsToPass = props;
-          }
-          return _react2.default.createElement(Link, (0, _extends3.default)({}, propsToPass, {
-            __source: {
-              fileName: _jsxFileName,
-              lineNumber: 151
-            }
-          }));
+        var locale2 = locale || _this2.locale;
+
+        if (nameOrUrl) {
+          (0, _assign2.default)(newProps, _this2.findAndGetUrls(nameOrUrl, locale2, params).urls);
         }
-
-        (0, _assign2.default)(newProps, _this3.findAndGetUrls(href, locale2, params).urls);
 
         return _react2.default.createElement(Link, (0, _extends3.default)({}, newProps, {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 156
+            lineNumber: 124
           }
         }));
       };
+
       return LinkRoutes;
     }
   }, {
     key: 'getRouter',
     value: function getRouter(Router) {
-      var _this4 = this;
+      var _this3 = this;
 
       var wrap = function wrap(method) {
         return function (route, params, locale, options) {
-          var locale2 = typeof locale === 'string' ? locale : _this4.locale;
+          var locale2 = typeof locale === 'string' ? locale : _this3.locale;
           var options2 = (typeof locale === 'undefined' ? 'undefined' : (0, _typeof3.default)(locale)) === 'object' ? locale : options;
 
-          var _findAndGetUrls = _this4.findAndGetUrls(route, locale2, params),
+          var _findAndGetUrls = _this3.findAndGetUrls(route, locale2, params),
               byName = _findAndGetUrls.byName,
               _findAndGetUrls$urls = _findAndGetUrls.urls,
               as = _findAndGetUrls$urls.as,
@@ -278,6 +243,7 @@ var Routes = function () {
       Router.pushRoute = wrap('push');
       Router.replaceRoute = wrap('replace');
       Router.prefetchRoute = wrap('prefetch');
+
       return Router;
     }
   }]);
@@ -327,10 +293,10 @@ var Route = function () {
   }, {
     key: 'valuesToParams',
     value: function valuesToParams(values) {
-      var _this5 = this;
+      var _this4 = this;
 
       return values.reduce(function (params, val, i) {
-        return (0, _assign2.default)(params, (0, _defineProperty3.default)({}, _this5.keys[i].name, val));
+        return (0, _assign2.default)(params, (0, _defineProperty3.default)({}, _this4.keys[i].name, val));
       }, {});
     }
   }, {
@@ -343,14 +309,14 @@ var Route = function () {
   }, {
     key: 'getAs',
     value: function getAs() {
-      var _this6 = this;
+      var _this5 = this;
 
       var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
       var as = this.toPath(params) || '/';
       var keys = (0, _keys2.default)(params);
       var qsKeys = keys.filter(function (key) {
-        return _this6.keyNames.indexOf(key) === -1;
+        return _this5.keyNames.indexOf(key) === -1;
       });
 
       if (!qsKeys.length) return as;
