@@ -67,12 +67,12 @@ describe('Routes', () => {
 
   test('match and merge params into query', () => {
     const routes = nextRoutes().add('a', 'en').add('b', 'en', '/b/:b').add('c', 'en')
-    expect(routes.match('/en/b/b?b=x&c=c').query).toMatchObject({b: 'b', c: 'c'})
+    expect(routes.match('/b/b?b=x&c=c').query).toMatchObject({b: 'b', c: 'c'})
   })
 
   test('match homepage route', () => {
     const {routes, route} = setupRoute('homepage', 'en')
-    expect(routes.match('/en').route).toMatchObject(route)
+    expect(routes.match('/').route).toMatchObject(route)
   })
 
   test('generate urls from params', () => {
@@ -101,8 +101,8 @@ describe('Request handler', () => {
   }
 
   test('find route and call render', () => {
-    const {routes, app, req, res} = setup('/en/a')
-    const {route, query} = routes.add('a', 'en').match('/en/a')
+    const {routes, app, req, res} = setup('/en-gb/a')
+    const {route, query} = routes.add('test', 'en-gb', '/en-gb/a').match('/en-gb/a')
     routes.getRequestHandler(app)(req, res)
     expect(app.render).toBeCalledWith(req, res, route.page, query)
   })
@@ -112,14 +112,14 @@ describe('Request handler', () => {
     const app = {getRequestHandler: jest.fn(), render: jest.fn()}
     const req = {url: '/cs/test'}
 
-    routes.add('test', 'cs', '/test')
+    routes.add('test', 'cs', '/cs/test')
     routes.getRequestHandler(app)(req, {})
     expect(req.locale).toEqual('cs')
   })
 
   test('find route and call custom handler', () => {
-    const {routes, app, req, res} = setup('/en/a')
-    const {route, query} = routes.add('a', 'en').match('/en/a')
+    const {routes, app, req, res} = setup('/en-us/a')
+    const {route, query} = routes.add('a', 'en-us', '/en-us/a').match('/en-us/a')
     const customHandler = jest.fn()
     const expected = expect.objectContaining({req, res, route, query})
     routes.getRequestHandler(app, customHandler)(req, res)

@@ -180,6 +180,9 @@ var Routes = function () {
             parsedUrl = _match2.parsedUrl;
 
         if (route) {
+          req.locale = route.locale;
+          req.nextRoute = route.nextRoute;
+
           if (customHandler) {
             customHandler({ req: req, res: res, route: route, query: query });
           } else {
@@ -213,7 +216,7 @@ var Routes = function () {
         return _react2.default.createElement(Link, (0, _extends3.default)({}, newProps, {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 124
+            lineNumber: 127
           }
         }));
       };
