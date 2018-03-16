@@ -281,13 +281,6 @@ var Route = function () {
   (0, _createClass3.default)(Route, [{
     key: 'match',
     value: function match(path) {
-      if (path.substring(1, this.locale.length + 1) === this.locale) {
-        path = path.substring(this.locale.length + 1);
-
-        if (!path) {
-          return {};
-        }
-      }
       var values = this.regex.exec(path);
       if (values) {
         return this.valuesToParams(values.slice(1));

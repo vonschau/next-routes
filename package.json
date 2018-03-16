@@ -37,7 +37,7 @@
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-eslint": "^8.2.2",
-    "babel-jest": "^22.4.1",
+    "babel-jest": "^23.0.0-alpha.0",
     "babel-preset-env": "^1.6.1",
     "concurrently": "^3.5.1",
     "coveralls": "^3.0.0",
@@ -47,7 +47,7 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-test-renderer": "^16.2.0",
-    "standard": "^11.0.0"
+    "standard": "^11.0.1"
   },
   "author": "fridays",
   "license": "MIT",
