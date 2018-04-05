@@ -18,7 +18,7 @@ class Routes {
     this.locale = locale
   }
 
-  add (name, locale = this.locale, pattern, page, data) {
+  add (name, locale = this.locale, pattern, page, data, update = false) {
     let options
     if (name instanceof Object) {
       options = name
@@ -34,6 +34,7 @@ class Routes {
       }
 
       locale = options.locale || this.locale
+      update = options.update || false
     } else {
       if (typeof page === 'object') {
         data = page
@@ -50,9 +51,16 @@ class Routes {
     }
 
     if (this.findByName(name, locale)) {
-      throw new Error(`Route "${name}" already exists`)
+      if (update) {
+        // remove old route on update
+        this.routes = this.routes.filter(route => route.name !== name || route.locale !== locale)
+      } else {
+        throw new Error(`Route "${name}" already exists`)
+      }
     }
+
     this.routes.push(new Route(options))
+
     return this
   }
 
@@ -106,7 +114,8 @@ class Routes {
     if (route) {
       return {route, urls: route.getUrls(params), byName: true}
     } else {
-      throw new Error(`Route "${name}" not found`)
+      return {route: this.routes[0], urls: this.routes[0].getUrls(params), byName: true}
+      // throw new Error(`Route "${name}" not found`)
     }
   }
 
@@ -118,7 +127,7 @@ class Routes {
 
       if (route) {
         req.locale = route.locale
-        req.nextRoute = route.nextRoute
+        req.nextRoute = route
 
         if (customHandler) {
           customHandler({req, res, route, query})
