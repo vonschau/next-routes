@@ -3,13 +3,10 @@ import { parse } from 'url'
 import NextLink from 'next/link'
 import NextRouter from 'next/router'
 import Route from './Route'
+import { generateRouteFromObjectName } from './helpers/routeHelper'
 
 export default class Routes {
-  constructor ({
-                 Link = NextLink,
-                 Router = NextRouter,
-                 locale
-               } = {}) {
+  constructor ({ Link = NextLink, Router = NextRouter, locale } = {}) {
     this.routes = []
     this.Link = this.getLink(Link)
     this.Router = this.getRouter(Router)
@@ -19,20 +16,7 @@ export default class Routes {
   add (name, locale = this.locale, pattern, page, data, update = false) {
     let options
     if (name instanceof Object) {
-      options = name
-
-      if (!options.name) {
-        throw new Error(`Unnamed routes not supported`)
-      }
-
-      name = options.name
-
-      if (!options.page) {
-        options.page = options.name
-      }
-
-      locale = options.locale || this.locale
-      update = options.update || false
+      options = generateRouteFromObjectName(name)
     } else {
       if (typeof page === 'object') {
         data = page
@@ -41,11 +25,11 @@ export default class Routes {
         page = page || name
       }
 
-      options = {name, locale, pattern, page}
+      options = { name, locale, pattern, page }
+    }
 
-      if (data) {
-        options.data = data
-      }
+    if (data) {
+      options.data = data
     }
 
     if (this.findByName(name, locale)) {
@@ -88,7 +72,7 @@ export default class Routes {
 
   match (url) {
     const parsedUrl = parse(url, true)
-    const {pathname, query} = parsedUrl
+    const { pathname, query } = parsedUrl
 
     return this.routes.reduce((result, route) => {
       if (result.route) {
@@ -101,8 +85,8 @@ export default class Routes {
         return result
       }
 
-      return {...result, route, params, query: {...query, ...params}}
-    }, {query, parsedUrl})
+      return { ...result, route, params, query: { ...query, ...params } }
+    }, { query, parsedUrl })
   }
 
   findAndGetUrls (name, locale, params) {
@@ -110,9 +94,9 @@ export default class Routes {
     const route = this.findByName(name, locale)
 
     if (route) {
-      return {route, urls: route.getUrls(params), byName: true}
+      return { route, urls: route.getUrls(params), byName: true }
     } else {
-      return {route: this.routes[0], urls: this.routes[0].getUrls(params), byName: true}
+      return { route: this.routes[0], urls: this.routes[0].getUrls(params), byName: true }
       // throw new Error(`Route "${name}" not found`)
     }
   }
@@ -121,14 +105,14 @@ export default class Routes {
     const nextHandler = app.getRequestHandler()
 
     return (req, res) => {
-      const {route, query, parsedUrl} = this.match(req.url)
+      const { route, query, parsedUrl } = this.match(req.url)
 
       if (route) {
         req.locale = route.locale
         req.nextRoute = route
 
         if (customHandler) {
-          customHandler({req, res, route, query})
+          customHandler({ req, res, route, query })
         } else {
           app.render(req, res, route.page, query)
         }
@@ -140,7 +124,7 @@ export default class Routes {
 
   getLink (Link) {
     const LinkRoutes = props => {
-      const {href, locale, params, ...newProps} = props
+      const { href, locale, params, ...newProps } = props
       const locale2 = locale || this.locale
       const parsedUrl = parse(href)
 
@@ -167,7 +151,7 @@ export default class Routes {
 
   getRouter (Router) {
     const wrap = method => (route, params, locale, options) => {
-      const {byName, urls: {as, href}} = this.findAndGetUrls(route, locale, params)
+      const { byName, urls: { as, href } } = this.findAndGetUrls(route, locale, params)
       return Router[method](href, as, byName ? options : params)
     }
 
