@@ -1,29 +1,30 @@
 import pathToRegexp from 'path-to-regexp'
 
 export default class Route {
-  constructor ({name, locale, pattern, page, data}) {
+  constructor ({ name, locale, pattern, page, data, isDefaultLocale = false }) {
     if (!name && !page) {
       throw new Error(`Missing page to render for route "${pattern}"`)
     }
 
+    this.isDefaultLocale = isDefaultLocale
     this.name = name
     this.locale = locale
     this.pattern = name === 'homepage' ? '' : (pattern || `/${name}`)
     this.page = page.replace(/(^|\/)homepage/, '').replace(/^\/?/, '/')
-    this.regex = pathToRegexp(this.pattern, this.keys = [])
+    this.regex = pathToRegexp(buildPattern(isDefaultLocale, locale, this.pattern), this.keys = [])
     this.keyNames = this.keys.map(key => key.name)
     this.toPath = pathToRegexp.compile(this.pattern)
     this.data = data || {}
   }
 
   match (path) {
-    if (path.substring(1, this.locale.length + 1) === this.locale) {
-      path = path.substring(this.locale.length + 1)
+    // if (path.substring(1, this.locale.length + 1) === this.locale) {
+    //   path = path.substring(this.locale.length + 1)
 
-      if (!path) {
-        return {}
-      }
-    }
+    //   if (!path) {
+    //     return {}
+    //   }
+    // }
     const values = this.regex.exec(path)
     if (values) {
       return this.valuesToParams(values.slice(1))
@@ -57,8 +58,16 @@ export default class Route {
   getUrls (params) {
     const as = this.getAs(params)
     const href = this.getHref(params)
-    return {as, href}
+    return { as, href }
   }
+}
+
+const buildPattern = (isDefaultLocale, locale, pattern) => {
+  const startWithSlash = pattern.startsWith('/')
+  if (isDefaultLocale) {
+    return `/:locale(${locale})?${startWithSlash ? '' : '/'}${pattern}`
+  }
+  return `/:locale(${locale})${startWithSlash ? '' : '/'}${pattern}`
 }
 
 const toQuerystring = obj => Object.keys(obj).map(key => {

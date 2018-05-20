@@ -32,6 +32,8 @@ export default class Routes {
       options.data = data
     }
 
+    options.isDefaultLocale = locale === this.locale
+
     if (this.findByName(name, locale)) {
       if (update) {
         // remove old route on update
@@ -78,9 +80,7 @@ export default class Routes {
       if (result.route) {
         return result
       }
-
       const params = route.match(pathname)
-
       if (!params) {
         return result
       }

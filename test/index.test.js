@@ -74,6 +74,7 @@ describe('Routes', () => {
       expect(route).toMatchObject({ name: 'a', locale: 'en', pattern: '/:a', page: '/c', data: data })
     })
   })
+
   test('page with leading slash', () => {
     setup('a', 'en', '/', '/b').testRoute({ page: '/b' })
   })
@@ -83,7 +84,7 @@ describe('Routes', () => {
   })
 
   test('match and merge params into query', () => {
-    const routes = nextRoutes().add('a', 'en').add('b', 'en', '/b/:b').add('c', 'en')
+    const routes = nextRoutes().add('a', 'en', '/').add('b', 'en', '/b/:b').add('c', 'en', '/c')
     expect(routes.match('/en/b/b?b=x&c=c').query).toMatchObject({ b: 'b', c: 'c' })
   })
 
@@ -177,9 +178,4 @@ describe(`Router ${routerMethods.join(', ')}`, () => {
     const { as, href } = route.getUrls({ b: 'b' })
     testMethods(['a', { b: 'b' }, 'en', {}], [href, as, {}])
   })
-  /*
-    test('with route not found', () => {
-      setup('a', 'en').testException(['/b', 'en', {}])
-    })
-  */
 })
