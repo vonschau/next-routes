@@ -1,6 +1,6 @@
 # Sacajawea 
 
-## Manage your multi language routes with Next.js, easily
+## Manage your multi-language routes with Next.js, easily
 
 Based on [Next-Routes](https://github.com/fridays/next-routes) and [next-routes-with-locale](https://github.com/vonschau/next-routes-with-locale) with possibility to add routes with the same name but different for locale/pattern 
 
@@ -114,7 +114,7 @@ export default class News extends React.Component {
 }
 ```
 
-> **RequestHandler automatically sets req.locale to locale of matched route so you can use it in your app.**
+> **RequestHandler automatically sets req.locale to a locale of a matched route so you can use it in your app.**
 
 
 ### `Router` example
