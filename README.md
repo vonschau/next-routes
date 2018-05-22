@@ -1,68 +1,36 @@
-# Dynamic Routes with localization for Next.js
+#Sacajawea 
 
-Based on [Next-Routes](https://github.com/fridays/next-routes) with these changes:
+## Manage your multi language routes with Next.js, easily
 
-- No support for unnamed routes
-- Route can be added only by name, locale and pattern (and optionally page) or options object
-- `Link` and `Router` generate URLs only by route definition (name + params)
-- URLs are prefixed with locale (ie. /en/about)
-- Routes can have data object (if you generate routes dynamically you can pass custom data there)
-- default RequestHandler set locale and nextRoute properties on request (you can get data with ```req.nextRoute.data```) 
+Based on [Next-Routes](https://github.com/fridays/next-routes) and [next-routes-with-locale](https://github.com/vonschau/next-routes-with-locale) with possibility to add routes with the same name but different for locale/pattern 
+
+In the future I will want to implement:
++ handle error with exact status code 
++ route middleware
 
 ## How to use
 
 Install:
 
 ```bash
-npm install next-routes-with-locale --save
+npm install sacajawea --save
 ```
 
 Create `routes.js` inside your project:
 
 ```javascript
-const routes = module.exports = require('next-routes-with-locale')({ locale: 'en' })
+const routes = require('sacajawea ')({ locale: 'en' }) // this locale is the default language
 
 routes
 .add('about', 'en', '/about')
-.add('blog', 'en', '/blog/:slug')
-.add('blog', 'en', '/blog/:slug', {myCustom: 'data'})
-.add('user', 'en', '/user/:id', 'profile', {myCustom: 'data'})
-.add({name: 'beta', locale: 'en', pattern: '/v3', page: 'v3'})
-.add('about', 'cs', '/o-projektu')
-.add('blog', 'cs', '/blog/:slug')
-.add('user', 'cs', '/uzivatel/:id', 'profile')
-.add({name: 'beta', locale: 'cs', pattern: '/v3', page: 'v3'})
+.add('about', 'it', '/chi-siamo')
+.add('news', 'en','/news/:slug', 'news-detail')
+.add('news', 'it','/notizia/:slug', 'news-detail')
+...
 ```
 
-This file is used both on the server and the client.
 
-API:
-
-- `routes.add(name, locale, pattern = /name, page = name, data)`
-- `routes.add(object)`
-
-Arguments:
-
-- `name` - Route name
-- `locale` - Locale of the route
-- `pattern` - Route pattern (like express, see [path-to-regexp](https://github.com/pillarjs/path-to-regexp))
-- `page` - Page inside `./pages` to be rendered; can be ommited
-- `data` - Custom data object
-
-The page component receives the matched URL parameters merged into `query`
-
-```javascript
-export default class Blog extends React.Component {
-  static async getInitialProps ({query}) {
-    // query.slug
-  }
-  render () {
-    // this.props.url.query.slug
-  }
-}
-```
-
-## On the server
+## Server-side
 
 ```javascript
 // server.js
@@ -71,7 +39,7 @@ const routes = require('./routes')
 const app = next({dev: process.env.NODE_ENV !== 'production'})
 const handler = routes.getRequestHandler(app)
 
-// With express
+// With express -- RACCOMMENDED
 const express = require('express')
 app.prepare().then(() => {
   express().use(handler).listen(3000)
@@ -84,31 +52,12 @@ app.prepare().then(() => {
 })
 ```
 
-> RequestHandler automatically sets req.locale to locale of matched route so you can use it in your app.
 
-Optionally you can pass a custom handler, for example:
-
-```javascript
-const handler = routes.getRequestHandler(app, ({req, res, route, query}) => {
-  app.render(req, res, route.page, query)
-})
-```
-
-Make sure to use `server.js` in your `package.json` scripts:
-
-```json
-"scripts": {
-  "dev": "node server.js",
-  "build": "next build",
-  "start": "NODE_ENV=production node server.js"
-}
-```
-
-## On the client
+## Client-side
 
 Import `Link` and `Router` from your `routes.js` file to generate URLs based on route definition:
 
-### `Link` example
+### `Link`
 
 ```jsx
 // pages/index.js
@@ -116,13 +65,9 @@ import {Link} from '../routes'
 
 export default () => (
   <div>
-    <div>Welcome to Next.js!</div>
-    <Link href='blog' params={{slug: 'hello-world'}}>
-      <a>Hello world</a>
-    </Link>
-    or
-    <Link href='blog' locale='cs' params={{slug: 'ahoj-svete'}}>
-      <a>Hello world</a>
+    <div>Hi, Sacajawea!</div>
+    <Link href='news' locale='en' params={{slug: 'do-you-need-directions'}}>
+      <a>Please, show me the right way</a>
     </Link>
   </div>
 )
@@ -141,6 +86,36 @@ Props:
 - `params` - Optional parameters for named routes
 
 It generates the URLs for `href` and `as` and renders `next/link`. Other props like `prefetch` will work as well.
+
+
+
+##API
+
+###`routes.add`
+This function add a new route
+
+| name  | is required  | example  | note  |
+| ------------ | ------------ | ------------ | ------------ |
+|  **`name`** | √  | `home`  | name of the route  |
+|  **`locale`** |  √ | `it`  | locale of the route. This field must always be added, even if the language of the route is the same as the default language  |
+| **`pattern`** | √  | `/en/news/:slug`  | Route pattern (see [path-to-regexp](https://github.com/pillarjs/path-to-regexp)) to know the right way to build perfect route  |
+| **`data`**  | X  | ` { foo: 'bar' } `  | Custom data object  |
+
+If you route have match parameter on URL, all data is merged info `query`. Available inside `getInitialProps ` function
+
+```javascript
+export default class News extends React.Component {
+  static async getInitialProps ({query}) {
+    // query.slug
+  }
+  render () {
+    // this.props.url.query.slug
+  }
+}
+```
+
+> **RequestHandler automatically sets req.locale to locale of matched route so you can use it in your app.**
+
 
 ### `Router` example
 

@@ -1,8 +1,8 @@
 {
-  "name": "next-routes-with-locale",
-  "version": "1.3.7",
-  "description": "Easy to use locale-based dynamic routes for Next.js",
-  "repository": "vonschau/next-routes-with-locale",
+  "name": "sacajawea",
+  "version": "0.0.1",
+  "description": "Manage your multi language routes with Next.js, easily",
+  "repository": "neomusic/sacajawea",
   "main": "dist",
   "files": [
     "dist"
@@ -48,7 +48,7 @@
     "react-test-renderer": "^16.0.0",
     "standard": "^10.0.2"
   },
-  "author": "fridays",
+  "author": "neomusic",
   "license": "MIT",
   "keywords": [
     "next",
@@ -57,6 +57,7 @@
     "route",
     "router",
     "routes",
-    "routing"
+    "routing",
+    "multilanguage"
   ]
 }

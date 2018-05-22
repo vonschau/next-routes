@@ -1,8 +1,6 @@
 # build
 dist
 
-# example
-example
 
 # dependencies
 node_modules
@@ -12,8 +10,5 @@ npm-debug.log
 
 # coverage
 coverage
-
-# JetBrains
-.idea/
 
 TARGET.md
