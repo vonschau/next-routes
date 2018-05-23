@@ -1,6 +1,6 @@
 {
   "name": "sacajawea",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Manage your multi-language routes with Next.js, easily",
   "repository": "neomusic/sacajawea",
   "main": "dist",
