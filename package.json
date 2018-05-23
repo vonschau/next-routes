@@ -1,6 +1,6 @@
 {
   "name": "sacajawea",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Manage your multi-language routes with Next.js, easily",
   "repository": "neomusic/sacajawea",
   "main": "dist",
@@ -27,6 +27,7 @@
     ]
   },
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "path-to-regexp": "^1.7.0"
   },
   "peerDependencies": {

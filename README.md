@@ -73,22 +73,6 @@ export default () => (
 )
 ```
 
-API:
-
-- `<Link href='name'>...</Link>`
-- `<Link href='name' locale='locale'>...</Link>`
-- `<Link href='name' params={params}> ... </Link>`
-- `<Link href='name' locale='locale' params={params}> ... </Link>`
-
-Props:
-
-- `route` - Route name or URL to match (alias: `to`)
-- `params` - Optional parameters for named routes
-
-It generates the URLs for `href` and `as` and renders `next/link`. Other props like `prefetch` will work as well.
-
-
-
 ##API
 
 ###`routes.add`
@@ -120,40 +104,38 @@ export default class News extends React.Component {
 ### `Router` example
 
 ```jsx
-// pages/blog.js
+// pages/home.js
 import React from 'react'
 import {Router} from '../routes'
 
-export default class Blog extends React.Component {
-  handleClick () {
-    // With route name and params
-    Router.pushRoute('blog', {slug: 'hello-world'})
+export default class Home extends React.Component {
+  onClick () {
+    // With route name and params -- automaritically get current locale
+    Router.pushRoute('news', {slug: 'hi-world'})
     // With route name and params and explicit locale
-    Router.pushRoute('blog', {slug: 'hello-world'}, 'en')
+    Router.pushRoute('news', {slug: 'hi-world'}, 'en')
   }
   render () {
     return (
       <div>
-        <div>{this.props.url.query.slug}</div>
-        <button onClick={this.handleClick}>Home</button>
+        <button onClick={this.onClick}>News</button>
       </div>
     )
   }
 }
 ```
-
-API:
-
-- `Router.pushRoute(route, params)` - automatically get current locale
-- `Router.pushRoute(route, params, locale)`
-- `Router.pushRoute(route, params, locale, options)`
-
 Arguments:
+
+| name  | is required  | example  | note  |
+| ------------ | ------------ | ------------ | ------------ |
+|  **`route`** | √  | `news`  | route name  |
+|  **`locale`** | √  | `it`  | route locale  |
+|  **`params`** | X  | `{slug: 'hi-world'}`  | optional parameters for named routes  |
+
 
 - `route` - Route name
 - `locale` - Route locale
 - `params` - Optional parameters for named routes
-- `options` - Passed to Next.js
 
 The same works with `.replaceRoute()` and `.prefetchRoute()`
 
@@ -169,10 +151,3 @@ const routes = module.exports = require('next-routes')({
   Router: require('./my/router')
 })
 ```
-
----
-
-##### Related links
-
-- [zeit/next.js](https://github.com/zeit/next.js) - Framework for server-rendered React applications
-- [path-to-regexp](https://github.com/pillarjs/path-to-regexp) - Express-style path to regexp
