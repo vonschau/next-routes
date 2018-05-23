@@ -121,9 +121,8 @@ describe('Request handler', () => {
   test('find route and call render', () => {
     const { routes, app, req, res } = setup('/en/a')
     const { route, query } = routes.add('a', 'en').match('/en/a')
-    const locale = 'en'
     routes.getRequestHandler(app)(req, res)
-    expect(app.render).toBeCalledWith(req, res, route.page, query, locale)
+    expect(app.render).toBeCalledWith(req, res, route.page, query)
   })
 
   test('find route and test locale is set correctly', () => {

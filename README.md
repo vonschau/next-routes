@@ -98,9 +98,7 @@ export default class News extends React.Component {
 }
 ```
 
-> **RequestHandler automatically sets the local props on a location of a matching route so you can use it in your app.
->
-> The same value is also set in req.locale, but this feature will soon be deprecated**
+> **RequestHandler automatically sets the local inside of req.locale**
 
 
 ### `Router` example
