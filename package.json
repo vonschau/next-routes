@@ -1,6 +1,6 @@
 {
   "name": "sacajawea",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "Manage your multi-language routes with Next.js, easily",
   "repository": "neomusic/sacajawea",
   "main": "dist",
@@ -13,7 +13,8 @@
     "prepublishOnly": "npm run test",
     "pretest": "npm run lint && npm run build",
     "test": "npm run testOnly",
-    "testOnly": "jest \\.test.js --coverage --watchAll",
+    "testOnly": "jest \\.test.js --coverage",
+    "testDev": "jest \\.test.js --coverage --watchAll",
     "testCI": "npm run test && cat coverage/lcov.info | coveralls",
     "dev": "concurrently -k 'npm run build -- -w' 'npm run testOnly -- --watch'"
   },
