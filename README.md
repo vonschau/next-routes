@@ -89,7 +89,7 @@ If you route have match parameter on URL, all data is merged info `query`. Avail
 
 ```javascript
 export default class News extends React.Component {
-  static async getInitialProps ({query}) {
+  static async getInitialProps ({query,locale}) {
     // query.slug
   }
   render () {
@@ -98,7 +98,9 @@ export default class News extends React.Component {
 }
 ```
 
-> **RequestHandler automatically sets req.locale to a locale of a matched route so you can use it in your app.**
+> **RequestHandler automatically sets the local props on a location of a matching route so you can use it in your app.
+>
+> The same value is also set in req.locale, but this feature will soon be deprecated**
 
 
 ### `Router` example
