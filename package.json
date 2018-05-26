@@ -15,8 +15,7 @@
     "test": "npm run testOnly",
     "testOnly": "jest \\.test.js --coverage",
     "testDev": "jest \\.test.js --coverage --watchAll",
-    "testCI": "npm run test && cat coverage/lcov.info | coveralls",
-    "dev": "concurrently -k 'npm run build -- -w' 'npm run testOnly -- --watch'"
+    "testCI": "npm run test && cat coverage/lcov.info | coveralls"
   },
   "standard": {
     "parser": "babel-eslint"
@@ -41,6 +40,7 @@
     "babel-jest": "^20.0.3",
     "babel-preset-env": "^1.5.2",
     "concurrently": "^3.5.0",
+    "coveralls": "^3.0.1",
     "del-cli": "^1.1.0",
     "jest": "^20.0.4",
     "next": "^4.1.4",
