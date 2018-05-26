@@ -1,14 +1,15 @@
 import pathToRegexp from 'path-to-regexp'
 
 export default class Route {
-  constructor ({ name, locale, pattern, page, data, isDefaultLocale = false }) {
+  constructor ({ name, locale, pattern, page, data, isDefaultLocale = false, forceLocale = false }) {
     if (!name && !page) {
       throw new Error(`Missing page to render for route "${pattern}"`)
     }
 
-    this.isDefaultLocale = isDefaultLocale
     this.name = name
     this.locale = locale
+    this.isDefaultLocale = isDefaultLocale
+    this.forceLocale = forceLocale
     this.pattern = name === 'homepage' ? '' : (pattern || `/${name}`)
     this.page = page.replace(/(^|\/)homepage/, '').replace(/^\/?/, '/')
     this.regex = pathToRegexp(buildPattern(isDefaultLocale, locale, this.pattern), this.keys = [])
@@ -18,13 +19,13 @@ export default class Route {
   }
 
   match (path) {
-    // if (path.substring(1, this.locale.length + 1) === this.locale) {
-    //   path = path.substring(this.locale.length + 1)
+    if (this.forceLocale) {
+      const rgx = new RegExp(`/${this.locale}(/?)`)
+      if (!rgx.test(path)) {
+        return
+      }
+    }
 
-    //   if (!path) {
-    //     return {}
-    //   }
-    // }
     const values = this.regex.exec(path)
     if (values) {
       return this.valuesToParams(values.slice(1))

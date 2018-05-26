@@ -1,5 +1,9 @@
 # Sacajawea 
 
+[![Build Status](https://travis-ci.org/neomusic/Sacajawea.svg?branch=master)](https://travis-ci.org/neomusic/Sacajawea)
+
+[![GitHub version](https://badge.fury.io/gh/neomusic%2FSacajawea.svg)](https://badge.fury.io/gh/neomusic%2FSacajawea)
+
 ## Manage your multi-language routes with Next.js, easily
 
 Based on [Next-Routes](https://github.com/fridays/next-routes) and [next-routes-with-locale](https://github.com/vonschau/next-routes-with-locale) with possibility to add routes with the same name but different for locale/pattern 

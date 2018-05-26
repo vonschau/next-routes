@@ -4,3 +4,4 @@ node_js:
   - "6"
   - "8"
 script: npm run testCI
+after_script: "npm install coveralls@2.13.3 --no-save && cat ./coverage/lcov.info | coveralls"

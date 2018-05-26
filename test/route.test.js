@@ -12,10 +12,13 @@ describe('constructor', () => {
   })
 })
 
-// describe('match', () => {
-//   it('can return empty object if route not match pattern', () => {
-//     const routeData = { name: 'home', locale: 'it', pattern: '/', page: 'home' }
-//     const route = new Route(routeData)
-//     console.log(route.match('/it'))
-//   })
-// })
+describe('match', () => {
+  test('match route after generated with forceLocale', () => {
+    const routeData = { name: 'home', locale: 'it', page: 'home', pattern: '/', forceLocale: true }
+    const route = new Route(routeData)
+
+    expect(route.match('/en/')).toBe(undefined)
+    expect(route.match('/it/')).toEqual({ locale: 'it' })
+    expect(route.match('/it')).toEqual({ locale: 'it' })
+  })
+})
