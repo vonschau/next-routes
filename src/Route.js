@@ -33,9 +33,14 @@ export default class Route {
   }
 
   valuesToParams (values) {
-    return values.reduce((params, val, i) => Object.assign(params, {
-      [this.keys[i].name]: val
-    }), {})
+    return values.reduce((params, val, i) => {
+      if (this.keys[i].name === 'locale' && val === undefined && this.isDefaultLocale) {
+        val = this.locale
+      }
+      return Object.assign(params, {
+        [this.keys[i].name]: val
+      })
+    }, {})
   }
 
   getHref (params = {}) {

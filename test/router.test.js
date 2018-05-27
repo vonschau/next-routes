@@ -33,9 +33,5 @@ describe(`Router ${routerMethods.join(', ')}`, () => {
     const {as, href} = route.getUrls({b: 'b'})
     testMethods(['a', {b: 'b'}, 'en', {}], [href, as, {}])
   })
-/*
-  test('with route not found', () => {
-    setup('a', 'en').testException(['/b', 'en', {}])
-  })
-*/
+
 })
