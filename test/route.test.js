@@ -13,8 +13,9 @@ describe('constructor', () => {
 
   test('handle error if name and page is not present', () => {
     expect(() => {
-      new Route({})
-    }).toThrow();
+      const route = new Route({})
+      route.match('/')
+    }).toThrow()
   })
 })
 

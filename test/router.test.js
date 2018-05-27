@@ -33,5 +33,4 @@ describe(`Router ${routerMethods.join(', ')}`, () => {
     const {as, href} = route.getUrls({b: 'b'})
     testMethods(['a', {b: 'b'}, 'en', {}], [href, as, {}])
   })
-
 })

@@ -17,7 +17,7 @@ describe('Routes', () => {
     const testRoute = expected => expect(route).toMatchObject(expected)
     return { routes, route, testRoute }
   }
-  
+
   test('generate urls from params', () => {
     const { route } = setup('a', 'en', '/a/:b/:c+')
     const params = { b: 'b', c: [1, 2], d: 'd' }

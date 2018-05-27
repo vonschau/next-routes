@@ -32,7 +32,6 @@ describe('match()', () => {
     expect(result.parsedUrl.path).toBe('/en/hello/world')
   })
 
-
   test('match and merge params into query', () => {
     const routes = nextRoutes().add('a', 'en', '/').add('b', 'en', '/b/:b').add('c', 'en', '/c')
     expect(routes.match('/en/b/b?b=x&c=c').query).toMatchObject({ b: 'b', c: 'c' })
@@ -46,7 +45,6 @@ describe('match()', () => {
 })
 
 describe('add()', () => {
-
   test('page with leading slash', () => {
     const routes = nextRoutes({ locale: 'it' }).add('a', 'en', '/', '/b')
     expect(routes.routes[0]).toMatchObject({ page: '/b' })
@@ -73,12 +71,12 @@ describe('add()', () => {
     const data = { contentItemId: 'test' }
     const router = nextRoutes({ locale: 'en' }).add({ name: 'a', locale: 'en', data: data })
     expect(router.routes[0]).toMatchObject({
-        name: 'a',
-        locale: 'en',
-        pattern: '/a',
-        page: '/a',
-        data: data
-      })
+      name: 'a',
+      locale: 'en',
+      pattern: '/a',
+      page: '/a',
+      data: data
+    })
   })
 
   test('add with name and pattern', () => {
@@ -99,8 +97,8 @@ describe('add()', () => {
 
   test('add with name, pattern,page and data', () => {
     const data = { contentItemId: 'test' }
-    const router =  nextRoutes({ locale: 'en' }).add('a', 'en', '/:a', 'b', data)
-   expect(router.routes[0]).toMatchObject({ name: 'a', locale: 'en', pattern: '/:a', page: '/b', data: data })
+    const router = nextRoutes({ locale: 'en' }).add('a', 'en', '/:a', 'b', data)
+    expect(router.routes[0]).toMatchObject({ name: 'a', locale: 'en', pattern: '/:a', page: '/b', data: data })
   })
 
   test('add with existing name throws', () => {
@@ -125,7 +123,6 @@ describe('add()', () => {
     expect(route).toMatchObject({ name: 'a', locale: 'en', pattern: '/:a', page: '/c', data: data })
   })
 })
-
 
 describe('sort routes', () => {
   test('routes should be ordered by forceLocale', () => {
