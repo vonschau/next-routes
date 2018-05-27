@@ -62,19 +62,19 @@ export default class Routes {
     this.locale = locale
   }
 
-  setRoutes (routes) {
-    if (Array.isArray(routes)) {
-      this.routes = []
-      routes.forEach(route => {
-        this.add(route.name, route.locale, route.pattern, route.page, route.data)
-      })
-    } else if (typeof routes === 'object') {
-      this.routes = []
-      this.add(routes.name, routes.locale, routes.pattern, routes.page, routes.data)
-    } else {
-      throw new Error('Data passed to setRoutes is neither an array nor an object')
-    }
-  }
+  // setRoutes (routes) {
+  //   if (Array.isArray(routes)) {
+  //     this.routes = []
+  //     routes.forEach(route => {
+  //       this.add(route.name, route.locale, route.pattern, route.page, route.data)
+  //     })
+  //   } else if (typeof routes === 'object') {
+  //     this.routes = []
+  //     this.add(routes.name, routes.locale, routes.pattern, routes.page, routes.data)
+  //   } else {
+  //     throw new Error('Data passed to setRoutes is neither an array nor an object')
+  //   }
+  // }
 
   findByName (name, locale) {
     if (name) {
