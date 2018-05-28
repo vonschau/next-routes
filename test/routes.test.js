@@ -145,3 +145,68 @@ describe('setLocale()', () => {
     expect(routes.locale).toBe('fr')
   })
 })
+
+describe('findByName', () => {
+  test('can return route with default locale found by name', () => {
+    const routes = nextRoutes({ locale: 'it' })
+    routes.add('news', 'en', '/news', 'newsList')
+    routes.add('news', 'it', '/notizie', 'newsList')
+
+    const result = routes.findByName('news')
+
+    expect(result.name).toBe('news')
+    expect(result.locale).toBe('it')
+    expect(result.pattern).toBe('/notizie')
+  })
+
+  test('can return route with specific locale found by name', () => {
+    const routes = nextRoutes({ locale: 'it' })
+    routes.add('news', 'en', '/news', 'newsList')
+    routes.add('news', 'it', '/notizie', 'newsList')
+
+    const result = routes.findByName('news', 'en')
+
+    expect(result.name).toBe('news')
+    expect(result.locale).toBe('en')
+    expect(result.pattern).toBe('/news')
+  })
+
+  test('can return false if route searched not exist', () => {
+    const routes = nextRoutes({ locale: 'it' })
+    routes.add('news', 'en', '/news', 'newsList')
+    routes.add('news', 'it', '/notizie', 'newsList')
+
+    const result = routes.findByName('pdoor', 'en')
+    expect(result).toBeFalsy()
+  })
+})
+
+describe('findAndGetUrls', () => {
+  test('can return route object with url for default locale found by name', () => {
+    const routes = nextRoutes({ locale: 'it' })
+    routes.add('news', 'en', '/news', 'newsList')
+    routes.add('news', 'it', '/notizie', 'newsList')
+
+    const result = routes.findAndGetUrls('news')
+    expect(result.urls.as).toBe('/notizie')
+  })
+
+  test('can return route object with url for specific locale found by namee', () => {
+    const routes = nextRoutes({ locale: 'it' })
+    routes.add('news', 'en', '/news', 'newsList')
+    routes.add('news', 'it', '/notizie', 'newsList')
+
+    const result = routes.findAndGetUrls('news', 'en')
+    expect(result.urls.as).toBe('/en/news')
+  })
+
+  test('can thrown exception if route not exist', () => {
+    const routes = nextRoutes({ locale: 'it' })
+    routes.add('news', 'en', '/news', 'newsList')
+    routes.add('news', 'it', '/notizie', 'newsList')
+
+    expect(() => {
+      routes.findAndGetUrls('pdoor', 'fr')
+    }).toThrow()
+  })
+})
