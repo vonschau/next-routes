@@ -10,12 +10,15 @@ class Routes {
   constructor ({
                  Link = NextLink,
                  Router = NextRouter,
-                 locale
+                 locale,
+                 hideDefaultLocale = false
                } = {}) {
     this.routes = []
     this.Link = this.getLink(Link)
     this.Router = this.getRouter(Router)
     this.locale = locale
+    this.defaultLocale = locale
+    this.hideDefaultLocale = hideDefaultLocale
   }
 
   add (name, locale = this.locale, pattern, page, data, update = false) {
@@ -49,6 +52,8 @@ class Routes {
         options.data = data
       }
     }
+
+    options.hideLocale = !!this.hideDefaultLocale && options.locale === this.defaultLocale
 
     if (this.findByName(name, locale)) {
       if (update) {
@@ -181,7 +186,7 @@ class Routes {
 }
 
 class Route {
-  constructor ({name, locale, pattern, page, data}) {
+  constructor ({name, locale, pattern, page, data, hideLocale}) {
     if (!name && !page) {
       throw new Error(`Missing page to render for route "${pattern}"`)
     }
@@ -194,10 +199,11 @@ class Route {
     this.keyNames = this.keys.map(key => key.name)
     this.toPath = pathToRegexp.compile(this.pattern)
     this.data = data || {}
+    this.hideLocale = hideLocale || false
   }
 
   match (path) {
-    if (path.substring(1, this.locale.length + 1) === this.locale) {
+    if (!this.hideLocale && path.substring(1, this.locale.length + 1) === this.locale) {
       path = path.substring(this.locale.length + 1)
 
       if (!path) {
@@ -221,7 +227,7 @@ class Route {
   }
 
   getAs (params = {}) {
-    const as = '/' + this.locale + this.toPath(params)
+    const as = (this.hideLocale ? '' : '/' + this.locale) + this.toPath(params)
     const keys = Object.keys(params)
     const qsKeys = keys.filter(key => this.keyNames.indexOf(key) === -1)
 

@@ -23,6 +23,12 @@ describe('Routes', () => {
     setup({name: 'a', locale: 'en'}).testRoute({name: 'a', locale: 'en', pattern: '/a', page: '/a'})
   })
 
+  test('add with hideDefaultLocale', () => {
+    const routes = nextRoutes({locale: 'en', hideDefaultLocale: true}).add({name: 'a', locale: 'en', pattern: '/a'})
+    const route = routes.findByName('a', 'en')
+    expect(route.getAs()).toEqual('/a')
+  })
+
   test('add with object and data', () => {
     const data = {contentItemId: 'test'}
     setup({name: 'a', locale: 'en', data: data})
@@ -37,6 +43,12 @@ describe('Routes', () => {
 
   test('add with name and pattern', () => {
     setup('a', 'en', '/:a').testRoute({name: 'a', locale: 'en', pattern: '/:a', page: '/a'})
+  })
+
+  test('add with hideDefaultLocale and name+pattern', () => {
+    const routes = nextRoutes({locale: 'en', hideDefaultLocale: true}).add('a', 'en', '/a')
+    const route = routes.findByName('a', 'en')
+    expect(route.getAs()).toEqual('/a')
   })
 
   test('add with name, pattern and data', () => {
