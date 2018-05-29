@@ -19,7 +19,7 @@ In the future I will want to implement:
 ### Install
 
 ```bash
-npm install sacajawea --save
+npm install @palmabit/sacajawea --save
 ```
 
 ### Create `routes.js` inside your project:
