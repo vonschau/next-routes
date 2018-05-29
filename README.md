@@ -103,6 +103,7 @@ This function changes the default locale
 
 ### `routes.findByName`
 Search route by name and locale
+
 | name  | is required  | example  | note  |
 | ------------ | ------------ | ------------ | ------------ |
 |  **`name`** | √  | `home`  | name of the route you want to search |
