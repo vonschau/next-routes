@@ -12,7 +12,7 @@ export default class Route {
     this.forceLocale = forceLocale
     this.pattern = name === 'homepage' ? '' : (pattern || `/${name}`)
     this.page = page.replace(/(^|\/)homepage/, '').replace(/^\/?/, '/')
-    this.regex = pathToRegexp(buildPattern(isDefaultLocale, locale, this.pattern), this.keys = [])
+    this.regex = pathToRegexp(buildPattern(forceLocale ? false : isDefaultLocale, locale, this.pattern), this.keys = [])
     this.keyNames = this.keys.map(key => key.name)
     this.toPath = pathToRegexp.compile(this.pattern)
     this.data = data || {}

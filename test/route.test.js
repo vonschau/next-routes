@@ -42,4 +42,10 @@ describe('match', () => {
     expect(route.match('/en/')).toBe(undefined)
     expect(route.match('/it')).toEqual({ locale: 'it' })
   })
+
+  test('match nothing if forceLocale is true and url not have locale', () => {
+    const routeData = { name: 'home', locale: 'it', page: 'home', pattern: '/', forceLocale: false, isDefaultLocale: false }
+    const route = new Route(routeData)
+    expect(route.match('/')).toBe(undefined)
+  })
 })
