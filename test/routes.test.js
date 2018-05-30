@@ -23,13 +23,22 @@ describe('match()', () => {
   })
 
   test('should match exact route when route is generated with forceLocale', () => {
-    const routes = nextRoutes({ locale: 'it' })
+    const routes = nextRoutes({ locale: 'it', forceLocale: true })
       .add('home', 'it', '/(.*)/:slug', 'homepage')
-      .add('home', 'en', '/(.*)/:slug', 'homepage', {}, false, true)
+      .add('home', 'en', '/(.*)/:slug', 'homepage')
 
     const result = routes.match('/en/hello/world')
     expect(result.route.locale).toBe('en')
     expect(result.parsedUrl.path).toBe('/en/hello/world')
+  })
+
+  test('should return object without route if route called not have lang on url when settings have forceLocale true', () => {
+    const routes = nextRoutes({ locale: 'it', forceLocale: true })
+      .add('home', 'it', '/(.*)/:slug', 'homepage')
+      .add('home', 'en', '/(.*)/:slug', 'homepage')
+
+    const result = routes.match('/hello/world')
+    expect(result).not.toHaveProperty('route')
   })
 
   test('match and merge params into query', () => {
@@ -124,17 +133,17 @@ describe('add()', () => {
   })
 })
 
-describe('sort routes', () => {
-  test('routes should be ordered by forceLocale', () => {
-    const routes = nextRoutes({ locale: 'it' })
-      .add('home', 'it', '/', 'homepage')
-      .add('news', 'en', '/', 'newsList', {}, false, true)
+// describe('sort routes', () => {
+//   test('routes should be ordered by forceLocale', () => {
+//     const routes = nextRoutes({ locale: 'it', forceLocale: true })
+//       .add('home', 'it', '/', 'homepage')
+//       .add('news', 'en', '/', 'newsList', {}, false)
 
-    expect(routes.routes[0].name).toBe('news')
-    expect(routes.routes[0].locale).toBe('en')
-    expect(routes.routes[0].forceLocale).toBeTruthy()
-  })
-})
+//     expect(routes.routes[0].name).toBe('news')
+//     expect(routes.routes[0].locale).toBe('en')
+//     expect(routes.routes[0].forceLocale).toBeTruthy()
+//   })
+// })
 
 describe('setLocale()', () => {
   test('change locale routes', () => {

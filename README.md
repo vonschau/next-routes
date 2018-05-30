@@ -26,7 +26,7 @@ npm install @palmabit/sacajawea --save
 ### Create `routes.js` inside your project:
 
 ```javascript
-const routes = require('sacajawea ')({ locale: 'en' }) // this locale is the default language
+const routes = require('sacajawea ')({ locale: 'en', forceLocale: true }) // this locale is the default language
 
 routes
 .add('about', 'en', '/about')
@@ -90,7 +90,7 @@ This function add a new route
 |  **`locale`** |  √ | `it`  | locale of the route. This field must always be added, even if the language of the route is the same as the default language  |
 | **`pattern`** | √  | `/en/news/:slug`  | Route pattern (see [path-to-regexp](https://github.com/pillarjs/path-to-regexp)) to know the right way to build perfect route  |
 | **`data`**  | X  | ` { foo: 'bar' } `  | Custom data object  |
-| **`forceLocale`**  | X  | `true`  | If this parameters is set to true the route must be have the locale inside of path  |
+| **`update`**  | X  | ` true `  |  update route with the same name and locale |
 
 ### `routes.setLocale`
 
