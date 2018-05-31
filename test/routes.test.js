@@ -133,18 +133,6 @@ describe('add()', () => {
   })
 })
 
-// describe('sort routes', () => {
-//   test('routes should be ordered by forceLocale', () => {
-//     const routes = nextRoutes({ locale: 'it', forceLocale: true })
-//       .add('home', 'it', '/', 'homepage')
-//       .add('news', 'en', '/', 'newsList', {}, false)
-
-//     expect(routes.routes[0].name).toBe('news')
-//     expect(routes.routes[0].locale).toBe('en')
-//     expect(routes.routes[0].forceLocale).toBeTruthy()
-//   })
-// })
-
 describe('setLocale()', () => {
   test('change locale routes', () => {
     const routes = nextRoutes({ locale: 'it' })

@@ -43,6 +43,30 @@ describe('Request handler', () => {
     return { app, routes, req: { url }, res: {} }
   }
 
+  const setupForceLocale = (url, locale) => {
+    const routes = nextRoutes({ locale, forceLocale: true })
+    const nextHandler = jest.fn()
+    const app = { getRequestHandler: () => nextHandler, render: jest.fn() }
+    return { app, routes, req: { url }, res: {} }
+  }
+
+  test('can call res.redirect if req.url is equal to / when forcelocale is true', () => {
+    const { routes, app, req, res } = setupForceLocale('/', 'it')
+    res.redirect = jest.fn()
+    routes.getRequestHandler(app)(req, res)
+    expect(res.redirect).toBeCalledWith(301, '/it')
+  })
+
+  test('can call res.writeHead and res.end when req.url is equal to / and forcelocale is true if res.redirect not exist', () => {
+    const { routes, app, req, res } = setupForceLocale('/', 'it')
+    res.writeHead = jest.fn()
+    res.end = jest.fn()
+    routes.getRequestHandler(app)(req, res)
+    expect(res.writeHead).toBeCalledWith(301, {
+      'Location': `/it`
+    })
+  })
+
   test('find route and call render', () => {
     const { routes, app, req, res } = setup('/en/a')
     const { route, query } = routes.add('a', 'en').match('/en/a')

@@ -47,15 +47,6 @@ export default class Routes {
 
     this.routes.push(new Route(options))
 
-    // if ((this.routes.some((item) => item.forceLocale))) {
-    //   this.routes = this.routes.sort((route) => {
-    //     if (route.forceLocale) {
-    //       return -1
-    //     }
-    //     return 1
-    //   })
-    // }
-
     return this
   }
 
@@ -113,6 +104,16 @@ export default class Routes {
           app.render(req, res, route.page, query)
         }
       } else {
+        if (req.url === '/' && this.forceLocale) {
+          if (typeof res.redirect === 'function') {
+            res.redirect(301, `/${this.locale}`)
+          } else {
+            res.writeHead(301, {
+              'Location': `/${this.locale}`
+            })
+            res.end()
+          }
+        }
         nextHandler(req, res, parsedUrl)
       }
     }

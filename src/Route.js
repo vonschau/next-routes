@@ -48,7 +48,12 @@ export default class Route {
   }
 
   getAs (params = {}) {
-    const localePath = !this.isDefaultLocale ? '/' + this.locale : ''
+    let localePath = ''
+    if (this.forceLocale) {
+      localePath = '/' + this.locale
+    } else {
+      localePath = !this.isDefaultLocale ? '/' + this.locale : ''
+    }
     const as = localePath + this.toPath(params)
     const keys = Object.keys(params)
     const qsKeys = keys.filter(key => this.keyNames.indexOf(key) === -1)
