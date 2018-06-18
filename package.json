@@ -27,11 +27,24 @@
     "roots": [
       "test/",
       "dist/"
+    ],
+    "setupFiles": [
+      "raf/polyfill",
+      "./test/setup.js"
+    ],
+    "unmockedModulePathPatterns": [
+      "<rootDir>/node_modules/react"
+    ],
+    "collectCoverageFrom": [
+      "**/*.{js,jsx}",
+      "!**/node_modules/**",
+      "!**/vendor/**"
     ]
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
-    "path-to-regexp": "^1.7.0"
+    "path-to-regexp": "^1.7.0",
+    "prop-types": "^15.6.1"
   },
   "peerDependencies": {
     "next": "^4.1.4",
@@ -45,6 +58,8 @@
     "concurrently": "^3.5.0",
     "coveralls": "^3.0.1",
     "del-cli": "^1.1.0",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
     "jest": "^20.0.4",
     "next": "^4.1.4",
     "react": "^16.0.0",

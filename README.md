@@ -14,6 +14,8 @@ Based on [Next-Routes](https://github.com/fridays/next-routes) and [next-routes-
 In the future I will want to implement:
 + handle error with exact status code 
 + route middleware
++ seo friendly component
++ static seo files (robots.txt, google verification file, etc)
 
 ## How to use
 
