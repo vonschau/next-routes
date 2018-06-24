@@ -1,3 +1,6 @@
-import Routes from './Routes'
+import R from './Routes'
+import SeoComponent from './seo'
 
-module.exports = opts => new Routes(opts)
+export const Routes = opts => new R(opts)
+
+export const Seo = SeoComponent

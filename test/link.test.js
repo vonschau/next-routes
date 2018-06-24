@@ -2,7 +2,7 @@
 import React from 'react'
 import NextLink from 'next/link'
 import ReactShallowRenderer from 'react-test-renderer/shallow'
-import nextRoutes from '../src'
+import { Routes as nextRoutes } from '../src'
 
 const renderer = new ReactShallowRenderer()
 const setupRoute = (...args) => {

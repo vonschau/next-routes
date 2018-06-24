@@ -1,5 +1,5 @@
 /* global describe, test, expect */
-import nextRoutes from './../src'
+import { Routes as nextRoutes } from './../src'
 
 describe('match()', () => {
   test('should return route with locale', () => {

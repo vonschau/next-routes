@@ -1,7 +1,7 @@
 /* global jest, describe, test, expect */
 import React from 'react'
 import ReactShallowRenderer from 'react-test-renderer/shallow'
-import nextRoutes from '../src'
+import { Routes as nextRoutes } from '../src'
 
 const renderer = new ReactShallowRenderer()
 

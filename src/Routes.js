@@ -6,12 +6,13 @@ import Route from './Route'
 import { generateRouteFromObjectName } from './helpers/routeHelper'
 
 export default class Routes {
-  constructor ({ Link = NextLink, Router = NextRouter, locale, forceLocale = false } = {}) {
+  constructor ({ Link = NextLink, Router = NextRouter, locale, forceLocale = false, siteName } = {}) {
     this.routes = []
     this.Link = this.getLink(Link)
     this.Router = this.getRouter(Router)
     this.locale = locale
     this.forceLocale = forceLocale
+    this.siteName = siteName
   }
 
   add (name, locale = this.locale, pattern, page, data, update = false) {
@@ -88,6 +89,18 @@ export default class Routes {
     }
   }
 
+  getMultilanguageUrls (route, query) {
+    return this.routes.filter((r) => {
+      return r.name === route.name
+    }).map((r) => {
+      return {
+        url: r.getAs(query),
+        locale: r.locale,
+        isDefaultLocale: r.isDefaultLocale
+      }
+    })
+  }
+
   getRequestHandler (app, customHandler) {
     const nextHandler = app.getRequestHandler()
 
@@ -97,6 +110,8 @@ export default class Routes {
       if (route) {
         req.locale = route.locale
         req.nextRoute = route
+        req.siteName = this.siteName
+        req.getMultilanguageUrls = () => this.getMultilanguageUrls(route, query)
 
         if (customHandler) {
           customHandler({ req, res, route, query })

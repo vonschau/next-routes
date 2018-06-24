@@ -36,6 +36,34 @@ class Seo extends React.Component {
     return <meta property="og:locale" content={regionalLocale} />
   }
 
+  getCanonical({ originalUrl, siteName }) {
+    if (!siteName) {
+      return null
+    }
+    const url = siteName.endsWith('/') || originalUrl.startsWith('/') ? `${siteName}${originalUrl}` : `${siteName}/${originalUrl}`
+
+    return (
+      <Aux>
+        <meta name="og:url" content={url} />
+        <link rel="canonical" href={url} />
+      </Aux>
+    )
+  }
+
+  getHrefLang({ nextRoute, getMultilanguageUrls, siteName }) {
+    if (!siteName) {
+      return null
+    }
+
+    const urls = getMultilanguageUrls()
+
+    return urls.length > 1 && urls.map(({ url, isDefaultLocale, locale }, key) => {
+      const fullUrl = `${siteName.replace(/\/$/, "")}${url}`
+      const regionalLocale = getRegionalLocale(locale)
+      return <link rel="alternate" href={fullUrl} hrefLang={regionalLocale} key={key} />
+    }) || null
+  }
+
   render() {
     const { title = '', description = '', req = {} } = this.props
     return (
@@ -46,6 +74,8 @@ class Seo extends React.Component {
 
         {this.getDescriptionTags(description)}
         {this.getOgLocale(req)}
+        {this.getCanonical(req)}
+        {this.getHrefLang(req)}
       </Aux>
     )
   }

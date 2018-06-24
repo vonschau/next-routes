@@ -1,5 +1,5 @@
 /* global jest, describe, test, expect */
-import nextRoutes from '../src'
+import { Routes as nextRoutes } from '../src'
 
 const setupRoute = (...args) => {
   const routes = nextRoutes({locale: 'en'}).add(...args)
