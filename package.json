@@ -13,7 +13,7 @@
     "prepublishOnly": "yarn test",
     "pretest": "npm run lint && npm run build",
     "test": "yarn testOnly",
-    "testOnly": "jest \\.test.js --coverage",
+    "testOnly": "jest \\.test.js --coverage --no-cache",
     "testCI": "yarn test && cat coverage/lcov.info | coveralls",
     "testWatch": "yarn test --watch",
     "dev": "concurrently -k 'npm run build -- -w' 'yarn testOnly -- --watch'"
@@ -22,13 +22,25 @@
     "parser": "babel-eslint"
   },
   "jest": {
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "<rootDir>/.next/",
+      "<rootDir>/node_modules/"
+    ],
     "roots": [
       "test/",
       "dist/"
-    ]
+    ],
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    }
   },
   "dependencies": {
+    "@babel/cli": "^7.0.0-beta.51",
+    "@babel/core": "^7.0.0-beta.51",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.51",
+    "babel-core": "7.0.0-bridge.0",
+    "jest-cli": "^23.2.0",
     "path-to-regexp": "^2.2.0"
   },
   "peerDependencies": {
@@ -36,14 +48,14 @@
     "react": "^16.2.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.24.1",
+    "@babel/preset-env": "^7.0.0-beta.51",
     "babel-eslint": "^8.2.2",
-    "babel-jest": "^23.0.0-alpha.0",
-    "babel-preset-env": "^1.6.1",
+    "babel-jest": "^23.2.0",
+    "babel-plugin-transform-define": "^1.3.0",
     "concurrently": "^3.5.1",
     "coveralls": "^3.0.0",
     "del-cli": "^1.1.0",
-    "jest": "^22.4.2",
+    "jest": "^23.2.0",
     "next": "^6.0.3",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
