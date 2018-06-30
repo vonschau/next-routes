@@ -1,3 +1,4 @@
+/* global jest, describe, test, expect */
 'use strict'
 
 import { shallow } from 'enzyme'

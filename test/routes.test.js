@@ -1,4 +1,4 @@
-/* global describe, test, expect */
+/* global describe, test, expect, jest */
 import { Routes as nextRoutes } from './../src'
 
 describe('match()', () => {
@@ -205,5 +205,26 @@ describe('findAndGetUrls', () => {
     expect(() => {
       routes.findAndGetUrls('pdoor', 'fr')
     }).toThrow()
+  })
+})
+
+describe('middleware()', () => {
+  test('can throw err if props middleware is not an array', () => {
+    const err = () => nextRoutes({ locale: 'it' }).add('a', 'en', '/', '/b').middleware(null)
+
+    expect(err).toThrowError(Error)
+  })
+
+  test('can throw err if props array contain an elements that is not a function', () => {
+    const err = () => nextRoutes({ locale: 'it' }).add('a', 'en', '/', '/b').middleware([jest.fn(), null, jest.fn])
+
+    expect(err).toThrowError(Error)
+  })
+
+  test('can return route with middleware array inside', () => {
+    const testFunct = () => { }
+    const routes = nextRoutes({ locale: 'it' }).add('a', 'en', '/', '/b').middleware([testFunct])
+    expect(routes.routes[0].middlewares).toBeInstanceOf(Array)
+    expect(routes.routes[0].middlewares[0]).toBe(testFunct)
   })
 })

@@ -24,6 +24,7 @@
     "parser": "babel-eslint"
   },
   "jest": {
+    "setupTestFrameworkScriptFile": "jest-extended",
     "roots": [
       "test/",
       "dist/"
@@ -43,6 +44,7 @@
     ]
   },
   "dependencies": {
+    "async": "^2.6.1",
     "babel-polyfill": "^6.26.0",
     "path-to-regexp": "^1.7.0",
     "prop-types": "^15.6.1"
@@ -62,6 +64,7 @@
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "jest": "^20.0.4",
+    "jest-extended": "^0.7.2",
     "next": "^4.1.4",
     "node-mocks-http": "^1.7.0",
     "react": "^16.0.0",

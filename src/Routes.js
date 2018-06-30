@@ -4,6 +4,7 @@ import NextLink from 'next/link'
 import NextRouter from 'next/router'
 import Route from './Route'
 import { generateRouteFromObjectName } from './helpers/routeHelper'
+import MiddlewareManager from './middleware/MiddlewareManager'
 
 export default class Routes {
   constructor ({ Link = NextLink, Router = NextRouter, locale, forceLocale = false, siteName } = {}) {
@@ -48,6 +49,23 @@ export default class Routes {
 
     this.routes.push(new Route(options))
 
+    return this
+  }
+
+  middleware (functions = []) {
+    if (!functions || !Array.isArray(functions)) {
+      throw new Error('props must be an array')
+    }
+
+    const lastRoute = this.routes[this.routes.length - 1]
+
+    functions.forEach((middleware, index) => {
+      if (typeof middleware !== 'function') {
+        throw new Error(`middlewate at position ${index} is not a function`)
+      }
+    })
+
+    lastRoute.setMiddlewares(functions)
     return this
   }
 
@@ -113,10 +131,15 @@ export default class Routes {
         req.siteName = this.siteName
         req.getMultilanguageUrls = () => this.getMultilanguageUrls(route, query)
 
-        if (customHandler) {
-          customHandler({ req, res, route, query })
+        if (route.middlewares.length > 0) {
+          MiddlewareManager(route.middlewares, { req, res, route, query })((err, data) => {
+            if (err) throw err
+
+            req.nextData = data
+          })
+          renderRoute(app, customHandler, { req, res, route, query })
         } else {
-          app.render(req, res, route.page, query)
+          renderRoute(app, customHandler, { req, res, route, query })
         }
       } else {
         if (req.url === '/' && this.forceLocale) {
@@ -171,5 +194,13 @@ export default class Routes {
     Router.replaceRoute = wrap('replace')
     Router.prefetchRoute = wrap('prefetch')
     return Router
+  }
+}
+
+const renderRoute = (app, customHandler, { req, res, route, query }) => {
+  if (customHandler) {
+    customHandler({ req, res, route, query })
+  } else {
+    app.render(req, res, route.page, query)
   }
 }

@@ -16,6 +16,7 @@ export default class Route {
     this.keyNames = this.keys.map(key => key.name)
     this.toPath = pathToRegexp.compile(this.pattern)
     this.data = data || {}
+    this.middlewares = []
   }
 
   match (path) {
@@ -30,6 +31,10 @@ export default class Route {
     if (values) {
       return this.valuesToParams(values.slice(1))
     }
+  }
+
+  setMiddlewares (middlewares) {
+    this.middlewares = middlewares
   }
 
   valuesToParams (values) {
