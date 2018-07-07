@@ -54,10 +54,7 @@ class Routes {
     }
 
     if (Array.isArray(options.locale)) {
-      options.locale.forEach(locale => {
-        options.locale = locale
-        this.add(options)
-      })
+      options.locale.forEach(locale => this.add({...options, locale}))
       return this
     }
   
