@@ -53,6 +53,14 @@ class Routes {
       }
     }
 
+    if (Array.isArray(options.locale)) {
+      options.locale.forEach(locale => {
+        options.locale = locale
+        this.add(options)
+      })
+      return this
+    }
+  
     options.hideLocale = !!this.hideDefaultLocale && options.locale === this.defaultLocale
 
     if (this.findByName(name, locale)) {
