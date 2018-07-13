@@ -108,7 +108,7 @@ class Routes {
         return result
       }
 
-      return {...result, route, params, query: {...query, ...params}}
+      return {...result, route, params, query: {...query, ...params, nextRoute: route.name}}
     }, {query, parsedUrl})
   }
 
@@ -223,7 +223,7 @@ class Route {
   }
 
   getHref (params = {}) {
-    return `${this.page}?${toQuerystring(params)}`
+    return `${this.page}?${toQuerystring({...params, nextRoute: this.name})}`
   }
 
   getAs (params = {}) {
