@@ -13,7 +13,7 @@ describe('Component: Seo', () => {
   let res = {}
   let routes
   beforeAll(() => {
-    routes = nextRoutes({ locale: 'it', siteName: 'https://test.com' })
+    routes = nextRoutes({ locale: 'it', siteCanonicalUrl: 'https://test.com' })
       .add('home', 'en', '/', 'homepage')
       .add('home', 'it', '/', 'homepage')
       .add('home', 'de', '/', 'homepage')
@@ -83,8 +83,8 @@ describe('Component: Seo', () => {
       expect(result.contains(<link rel="canonical" href="https://test.com/en" />)).toBeTruthy()
     })
 
-    test('can return component without canonical field because siteName is not setted', () => {
-      routes.siteName = ''
+    test('can return component without canonical field because siteCanonicalUrl is not setted', () => {
+      routes.siteCanonicalUrl = ''
       routes.getRequestHandler({ getRequestHandler: jest.fn(), render: jest.fn() })(req)
       const result = shallow(<Seo req={req} />)
       expect(result.contains(<link rel="canonical" href="https://test.com/en" />)).toBeFalsy()
@@ -94,7 +94,7 @@ describe('Component: Seo', () => {
 
 
   test('can not return hreflang if lang is once',()=> {
-    const routes = nextRoutes({ locale: 'it', siteName: 'https://test.com' })
+    const routes = nextRoutes({ locale: 'it', siteCanonicalUrl: 'https://test.com' })
     .add('home', 'it', '/', 'homepage')
     .add('newsDetail', 'en', '/:slug', 'newsDetail')
     .add('newsDetail', 'it', '/:slug', 'newsDetail')
@@ -115,7 +115,7 @@ describe('Component: Seo', () => {
   })
 
   test('can return component with hreflang', () => {
-    const routes = nextRoutes({ locale: 'it', siteName: 'https://test.com' })
+    const routes = nextRoutes({ locale: 'it', siteCanonicalUrl: 'https://test.com' })
       .add('newsDetail', 'en', '/:slug', 'newsDetail')
       .add('newsDetail', 'it', '/:slug', 'newsDetail')
       .add('newsDetail', 'de', '/:slug', 'newsDetail')

@@ -39,11 +39,11 @@ class Seo extends React.Component {
     return <meta property="og:locale" content={regionalLocale} />
   }
 
-  getCanonical({ originalUrl, siteName }) {
-    if (!siteName) {
+  getCanonical({ originalUrl, siteCanonicalUrl }) {
+    if (!siteCanonicalUrl) {
       return null
     }
-    const url = siteName.endsWith('/') || originalUrl.startsWith('/') ? `${siteName}${originalUrl}` : `${siteName}/${originalUrl}`
+    const url = siteCanonicalUrl.endsWith('/') || originalUrl.startsWith('/') ? `${siteCanonicalUrl}${originalUrl}` : `${siteCanonicalUrl}/${originalUrl}`
 
     return (
       <Aux>
@@ -53,15 +53,15 @@ class Seo extends React.Component {
     )
   }
 
-  getHrefLang({ getMultilanguageUrls, siteName }) {
-    if (!siteName) {
+  getHrefLang({ getMultilanguageUrls, siteCanonicalUrl }) {
+    if (!siteCanonicalUrl) {
       return null
     }
 
     const urls = getMultilanguageUrls()
 
     return urls.length > 1 && urls.map(({ url, locale }, key) => {
-      const fullUrl = `${siteName.replace(/\/$/, "")}${url}`
+      const fullUrl = `${siteCanonicalUrl.replace(/\/$/, "")}${url}`
       const regionalLocale = getRegionalLocale(locale)
       return <link rel="alternate" href={fullUrl} hrefLang={regionalLocale} key={key} />
     }) || null

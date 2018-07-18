@@ -19,7 +19,7 @@ describe('High Order Component', () => {
   let req = {}
   let routes
   beforeAll(() => {
-    routes = nextRoutes({ locale: 'it', siteName: 'https://test.com' })
+    routes = nextRoutes({ locale: 'it', siteCanonicalUrl: 'https://test.com' })
       .add('home', 'en', '/', 'homepage')
       .add('home', 'it', '/', 'homepage')
       .add('home', 'de', '/', 'homepage')
@@ -31,10 +31,10 @@ describe('High Order Component', () => {
     })
   })
 
-  test('can return child component with SeoComponent in props', () => {
+  test('can return child component with SeoComponent in props', async () => {
     routes.getRequestHandler({ getRequestHandler: jest.fn(), render: jest.fn() })(req)
     const componentWrapped = withSeo(FakeComponent)
-    const result = componentWrapped.getInitialProps({req})
+    const result = await componentWrapped.getInitialProps({req})
     expect(result).toHaveProperty('SeoComponent')
   })
 
@@ -43,10 +43,10 @@ describe('High Order Component', () => {
     expect(React.Component.isPrototypeOf(componentWrapped)).toBeTruthy()
   })
 
-  test('can return render component with SeoComponent', () => {
+  test('can return render component with SeoComponent', async () => {
     routes.getRequestHandler({ getRequestHandler: jest.fn(), render: jest.fn() })(req)
     const ComponentWrapped = withSeo(FakeComponent)
-    const props = ComponentWrapped.getInitialProps({req})
+    const props = await ComponentWrapped.getInitialProps({req})
 
     const result = shallow(<FakeComponent {...props} />)
     expect(result.html()).toContain('<meta property="og:title" content="foo"/>')

@@ -1,6 +1,6 @@
 import R from './Routes'
-import withSeo from './seo'
+import ws from './seo'
 
 export const Routes = opts => new R(opts)
 
-export const WithSeo = withSeo
+export const WithSeo = ws
