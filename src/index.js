@@ -1,6 +1,6 @@
 import R from './Routes'
-import SeoComponent from './seo'
+import withSeo from './seo'
 
 export const Routes = opts => new R(opts)
 
-export const Seo = SeoComponent
+export const WithSeo = withSeo

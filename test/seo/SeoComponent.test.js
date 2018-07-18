@@ -2,7 +2,7 @@
 'use strict'
 
 import { shallow } from 'enzyme'
-import Seo from './../../src/seo'
+import Seo from './../../src/seo/seoComponent'
 import Route from './../../src/Route'
 import mocks from 'node-mocks-http'
 import { Routes as nextRoutes } from './../../src'
