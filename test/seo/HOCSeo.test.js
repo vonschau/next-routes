@@ -19,7 +19,7 @@ describe('High Order Component', () => {
   let req = {}
   let routes
   beforeAll(() => {
-    routes = nextRoutes({ locale: 'it', siteCanonicalUrl: 'https://test.com' })
+    routes = nextRoutes({ locale: 'it', siteUrl: 'https://test.com' })
       .add('home', 'en', '/', 'homepage')
       .add('home', 'it', '/', 'homepage')
       .add('home', 'de', '/', 'homepage')

@@ -14,7 +14,6 @@ Based on [Next-Routes](https://github.com/fridays/next-routes) and [next-routes-
 In the future I will want to implement:
 + handle error with exact status code 
 + route middleware
-+ seo friendly component
 + static seo files (robots.txt, google verification file, etc)
 
 ## How to use
@@ -28,8 +27,16 @@ npm install @palmabit/sacajawea --save
 ### Create `routes.js` inside your project:
 
 ```javascript
-const routes = require('sacajawea ')({ locale: 'en', forceLocale: true }) // this locale is the default language
+const routes = require('@palmabit/sacajawea ')({ locale: 'en', forceLocale: true, siteCanonicalUrl: ‘https://www.example.com' })
+```
+when: 
 
+ * **locale** is the default language
+ * **forceLocale** force all route to have locale on initial path
+ * **siteUrl** URL site 
+ 
+ 
+```javascript
 routes
 .add('about', 'en', '/about')
 .add('about', 'it', '/chi-siamo')
@@ -122,3 +129,129 @@ This function works similarly to "findByName", but in addition to return, the ro
 |  **`name`** | √  | `home`  | name of the route you want to search |
 |  **`locale`** |  X | `it`  | locale of the route searched. This field is optional, if it is not used, the default language is used   |
 |  **`params`** |  X | `{}`  | Any parameters to be passed to the route   |
+
+## `Link` component
+
+```jsx
+// pages/index.js
+import {Link} from '../routes'
+
+export default () => (
+  <div>
+    <div>Welcome to Next.js!</div>
+    <Link route='blog' params={{slug: 'hello-world'}}>
+      <a>Hello world</a>
+    </Link>
+    or
+    <Link route='/blog/hello-world' locale=“it”>
+      <a>Hello world</a>
+    </Link>
+  </div>
+)
+```
+
+
+Props:
+
+- `route` - Route name or URL to match (alias: `to`)
+- `params` - Optional parameters for named routes
+- `locale` - locale of route  
+
+It generates the URLs for `href` and `as` and renders `next/link`. Other props like `prefetch` will work as well.
+
+## `Router` component
+
+```jsx
+// pages/blog.js
+import React from 'react'
+import {Router} from '../routes'
+
+export default class Blog extends React.Component {
+  handleClick () {
+    // With route name and params
+    Router.pushRoute('blog', {slug: 'hello-world'})
+    // With route URL
+    Router.pushRoute('/blog/hello-world')
+  }
+  render () {
+    return (
+      <div>
+        <div>{this.props.url.query.slug}</div>
+        <button onClick={this.handleClick}>Home</button>
+      </div>
+    )
+  }
+}
+```
+
+API:
+
+- `Router.pushRoute(route)`
+- `Router.pushRoute(route, params)`
+- `Router.pushRoute(route, params, locale)`
+- `Router.pushRoute(route, params, locale, options)`
+
+Arguments:
+
+- `route` - Route name or URL to match
+- `params` - Optional parameters for named routes
+- `locale` - Route locale
+- `options` - Passed to Next.js
+
+The same works with `.replaceRoute()` and `.prefetchRoute()`
+
+It generates the URLs and calls `next/router`
+
+---
+
+Optionally you can provide custom `Link` and `Router` objects, for example:
+
+```javascript
+const routes = module.exports = require('next-routes')({
+  Link: require('./my/link')
+  Router: require('./my/router')
+})
+```
+
+---
+
+##SEO
+
+Sacajawea, from version 2, implements a helper able to automatically generate:
+
+* `title`
+* `description`
+* `canonical`
+* `og:title`
+* `og:description`
+* `og:locale`
+* `og:url`
+* `twitter:title`
+* `twitter:description`
+* hreflang links for the same route
+
+To implement this wrap your component into hoc component
+
+```javascript
+import { WithSeo } from '@palmabit/sacajawea'
+
+export default WithSeo(YourComponentPage)
+```
+
+after this into *props* you can found a `SeoComponent`
+
+We suggest to use [react-helmet](https://github.com/nfl/react-helmet) for a better integration 
+
+```javascript
+
+render() {
+    const { SeoComponent } = this.props
+    
+    return (
+    <Helmet>
+	    <title>foo</title>
+	    <SeoComponent title=“foo” description=“bar” />
+    </Helmet>
+    )
+}
+```

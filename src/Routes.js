@@ -7,13 +7,13 @@ import { generateRouteFromObjectName } from './helpers/routeHelper'
 import MiddlewareManager from './middleware/MiddlewareManager'
 
 export default class Routes {
-  constructor ({ Link = NextLink, Router = NextRouter, locale, forceLocale = false, siteCanonicalUrl } = {}) {
+  constructor ({ Link = NextLink, Router = NextRouter, locale, forceLocale = false, siteUrl } = {}) {
     this.routes = []
     this.Link = this.getLink(Link)
     this.Router = this.getRouter(Router)
     this.locale = locale
     this.forceLocale = forceLocale
-    this.siteCanonicalUrl = siteCanonicalUrl
+    this.siteUrl = siteUrl
   }
 
   add (name, locale = this.locale, pattern, page, data, update = false) {
@@ -128,7 +128,7 @@ export default class Routes {
       if (route) {
         req.locale = route.locale
         req.nextRoute = route
-        req.siteCanonicalUrl = this.siteCanonicalUrl
+        req.siteUrl = this.siteUrl
         req.getMultilanguageUrls = () => this.getMultilanguageUrls(route, query)
 
         if (route.middlewares.length > 0) {
