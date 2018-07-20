@@ -1,7 +1,11 @@
 # Sacajawea 
 
-[![Build Status](https://travis-ci.org/Palmabit-IT/Sacajawea.svg?branch=master)](https://travis-ci.org/Palmabit-IT/Sacajawea) [![GitHub version](https://badge.fury.io/gh/palmabit-IT%2FSacajawea.svg)](https://badge.fury.io/gh/palmabit-IT%2FSacajawea)
-![npm](https://img.shields.io/npm/dm/localeval.svg) [![Coverage Status](https://coveralls.io/repos/github/Palmabit-IT/Sacajawea/badge.svg?branch=master)](https://coveralls.io/github/Palmabit-IT/Sacajawea?branch=master)
+[![Build Status](https://travis-ci.org/Palmabit-IT/Sacajawea.svg?branch=master)](https://travis-ci.org/Palmabit-IT/Sacajawea)
+
+[![npm version](https://badge.fury.io/js/%40palmabit%2Fsacajawea.svg)](https://badge.fury.io/js/%40palmabit%2Fsacajawea)
+
+[![Coverage Status](https://coveralls.io/repos/github/Palmabit-IT/Sacajawea/badge.svg?branch=master)](https://coveralls.io/github/Palmabit-IT/Sacajawea?branch=master)
+
 
 ## Manage your multi-language routes with Next.js, easily
 
