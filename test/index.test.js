@@ -105,6 +105,12 @@ describe('Routes', () => {
     expect(routes.match('/en').route).toMatchObject(route)
   })
 
+  test('match homepage route with hideDefaultLocale', () => {
+    const routes = nextRoutes({locale: 'cs', hideDefaultLocale: true}).add('homepage', 'cs', '')
+    const route = routes.findByName('homepage', 'cs')
+    expect(route.getAs()).toEqual('/')
+  })
+
   test('generate urls from params', () => {
     const {route} = setup('a', 'en', '/a/:b/:c+')
     const params = {b: 'b', c: [1, 2], d: 'd'}
