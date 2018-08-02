@@ -44,7 +44,7 @@ describe('Component: Seo', () => {
   describe('description tags', () => {
     test('can return component with description field', () => {
       const result = shallow(<Seo description={'Lorem ipsum dolor sit amet'} />)
-      expect(result.contains(<meta property="description" content="Lorem ipsum dolor sit amet" />)).toBeTruthy()
+      expect(result.contains(<meta name="description" content="Lorem ipsum dolor sit amet" />)).toBeTruthy()
     })
     test('can return component with og:description field', () => {
       const result = shallow(<Seo description={'Lorem ipsum dolor sit amet'} />)
