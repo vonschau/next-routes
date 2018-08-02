@@ -9,7 +9,7 @@
 
 ## Manage your multi-language routes with Next.js, easily
 
-Based on [Next-Routes](https://github.com/fridays/next-routes) and [next-routes-with-locale](https://github.com/vonschau/next-routes-with-locale) the main changes is:
+Based on [Next-Routes](https://github.com/fridays/next-routes) and [next-routes-with-locale](https://github.com/vonschau/next-routes-with-locale) the main changes are:
 * Ability to add routes by forcing the presence of the initial language of the route
 * Improved route management
 * improved coverage and tests
@@ -18,7 +18,7 @@ Based on [Next-Routes](https://github.com/fridays/next-routes) and [next-routes-
 In the future I will want to implement:
 + handle error with exact status code 
 + route middleware
-+ static seo files (robots.txt, google verification file, etc)
++ static SEO files (robots.txt, google verification file, etc)
 
 ## How to use
 
