@@ -18,7 +18,7 @@ class Seo extends React.Component {
 
     return (
       <Aux>
-        <meta property="description" content={description} />
+        <meta name="description" content={description} />
         <meta property="og:description" content={description} />
         <meta property="twitter:description" content={description} />
       </Aux>
