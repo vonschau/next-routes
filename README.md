@@ -99,11 +99,11 @@ This function add a new route
 
 | name  | is required  | example  | note  |
 | ------------ | ------------ | ------------ | ------------ |
-|  **`name`** | √  | `home`  | name of the route  |
-|  **`locale`** |  √ | `it`  | locale of the route. This field must always be added, even if the language of the route is the same as the default language  |
-| **`pattern`** | √  | `/en/news/:slug`  | Route pattern (see [path-to-regexp](https://github.com/pillarjs/path-to-regexp)) to know the right way to build perfect route  |
-| **`data`**  | X  | ` { foo: 'bar' } `  | Custom data object  |
-| **`update`**  | X  | ` true `  |  update route with the same name and locale |
+|  **`name`** | ✔  | `home`  | name of the route  |
+|  **`locale`** |  ✔ | `it`  | locale of the route. This field must always be added, even if the language of the route is the same as the default language  |
+| **`pattern`** | ✔  | `/en/news/:slug`  | Route pattern (see [path-to-regexp](https://github.com/pillarjs/path-to-regexp)) to know the right way to build perfect route  |
+| **`data`**  | ✗  | ` { foo: 'bar' } `  | Custom data object  |
+| **`update`**  | ✗  | ` true `  |  update route with the same name and locale |
 
 ### `routes.setLocale`
 
@@ -120,8 +120,8 @@ Search route by name and locale
 
 | name  | is required  | example  | note  |
 | ------------ | ------------ | ------------ | ------------ |
-|  **`name`** | √  | `home`  | name of the route you want to search |
-|  **`locale`** |  X | `it`  | locale of the route searched. This field is optional, if it is not used, the default language is used   |
+|  **`name`** | ✔  | `home`  | name of the route you want to search |
+|  **`locale`** |  ✗ | `it`  | locale of the route searched. This field is optional, if it is not used, the default language is used   |
 
 Return **route object** or **false** if route not exist
 
@@ -130,9 +130,9 @@ This function works similarly to "findByName", but in addition to return, the ro
 
 | name  | is required  | example  | note  |
 | ------------ | ------------ | ------------ | ------------ |
-|  **`name`** | √  | `home`  | name of the route you want to search |
-|  **`locale`** |  X | `it`  | locale of the route searched. This field is optional, if it is not used, the default language is used   |
-|  **`params`** |  X | `{}`  | Any parameters to be passed to the route   |
+|  **`name`** | ✔  | `home`  | name of the route you want to search |
+|  **`locale`** |  ✗ | `it`  | locale of the route searched. This field is optional, if it is not used, the default language is used   |
+|  **`params`** |  ✗ | `{}`  | Any parameters to be passed to the route   |
 
 ## `Link` component
 
@@ -157,7 +157,7 @@ export default () => (
 
 Props:
 
-- `route` - Route name or URL to match (alias: `to`)
+- `route` - Route name or URL to match
 - `params` - Optional parameters for named routes
 - `locale` - locale of route  
 
@@ -219,7 +219,7 @@ const routes = module.exports = require('next-routes')({
 
 ---
 
-##SEO
+## SEO
 
 Sacajawea, from version 2, implements a helper able to automatically generate:
 
@@ -244,7 +244,7 @@ export default WithSeo(YourComponentPage)
 
 after this into *props* you can found a `SeoComponent`
 
-We suggest to use [react-helmet](https://github.com/nfl/react-helmet) for a better integration 
+If you want to override some tag generated, we suggest to use a single [Head](https://github.com/zeit/next.js/#populating-head) only for Seo component
 
 ```javascript
 
@@ -252,10 +252,12 @@ render() {
     const { SeoComponent } = this.props
     
     return (
-    <Helmet>
-	    <title>foo</title>
-	    <SeoComponent title=“foo” description=“bar” />
-    </Helmet>
+    <Head>
+      <SeoComponent title=“foo” description=“bar” />
+    </Head>
+    <Head>
+      <title>baz</title>
+    </Head>  
     )
 }
 ```
