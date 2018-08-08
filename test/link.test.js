@@ -34,7 +34,7 @@ describe('Link', () => {
 
   test('with name and params', () => {
     const {route, testLink} = setup('a', 'en', '/a/:b')
-    testLink({href: 'a', locale: 'en', params: {b: 'b'}}, route.getUrls({b: 'b'}))
+    testLink({route: 'a', locale: 'en', params: {b: 'b'}}, route.getUrls({b: 'b'}))
   })
 /*
   test('with route not found', () => {

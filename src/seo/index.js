@@ -8,7 +8,7 @@ export default function (Child) {
     Seo.defaultProps = Object.assign({}, Seo.defaultProps, { req: { nextRoute, getMultilanguageUrls, siteUrl, originalUrl } })
     const childProps = await childInitialProps(ctx)
 
-    return { ...childProps, SeoComponent: Seo }
+    return { ...childProps, SeoComponent: Seo || React.Component }
   }
 
   return Child
