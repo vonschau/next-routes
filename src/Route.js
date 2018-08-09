@@ -1,4 +1,5 @@
 import pathToRegexp from 'path-to-regexp'
+import removeTrailingSeparator from 'remove-trailing-separator'
 
 export default class Route {
   constructor ({ name, locale, pattern, page, data, isDefaultLocale = false, forceLocale = false }) {
@@ -59,7 +60,7 @@ export default class Route {
     } else {
       localePath = !this.isDefaultLocale ? '/' + this.locale : ''
     }
-    const as = localePath + this.toPath(params)
+    const as = removeTrailingSeparator(localePath + this.toPath(params))
     const keys = Object.keys(params)
     const qsKeys = keys.filter(key => this.keyNames.indexOf(key) === -1)
 
