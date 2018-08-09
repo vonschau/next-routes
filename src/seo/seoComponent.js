@@ -4,11 +4,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import getRegionalLocale from '../helpers/getRegionalLocale';
 
-const Aux = (props) => props.children
 class Seo extends React.Component {
 
   constructor(props) {
     super(props)
+    this.state = {
+      title: props.title,
+      description: props.description,
+      req: props.req
+    }
   }
 
   getDescriptionTags(description) {
@@ -17,11 +21,11 @@ class Seo extends React.Component {
     }
 
     return (
-      <Aux>
+      <React.Fragment>
         <meta name="description" content={description} />
         <meta property="og:description" content={description} />
         <meta property="twitter:description" content={description} />
-      </Aux>
+      </React.Fragment>
     )
   }
 
@@ -39,17 +43,17 @@ class Seo extends React.Component {
     return <meta property="og:locale" content={regionalLocale} />
   }
 
-  getCanonical({ originalUrl, siteUrl }) {
+  getCanonical({ originalUrl, siteUrl}) {
     if (!siteUrl) {
       return null
     }
     const url = siteUrl.endsWith('/') || originalUrl.startsWith('/') ? `${siteUrl}${originalUrl}` : `${siteUrl}/${originalUrl}`
 
     return (
-      <Aux>
+      <React.Fragment>
         <meta name="og:url" content={url} />
         <link rel="canonical" href={url} />
-      </Aux>
+      </React.Fragment>
     )
   }
 
@@ -68,10 +72,9 @@ class Seo extends React.Component {
   }
 
   render() {
-    const { title: titleMeta = '', description = '', req = {} } = this.props
+    const { title: titleMeta = '', description = '', req = {} } = this.state
     return (
-      <Aux>
-        <title>{titleMeta}</title>
+      <React.Fragment>
         <meta property="og:title" content={titleMeta} />
         <meta property="twitter:title" content={titleMeta} />
 
@@ -79,7 +82,7 @@ class Seo extends React.Component {
         {this.getOgLocale(req)}
         {this.getCanonical(req)}
         {this.getHrefLang(req)}
-      </Aux>
+      </React.Fragment>
     )
   }
 }

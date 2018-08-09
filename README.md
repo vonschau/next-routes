@@ -223,7 +223,6 @@ const routes = module.exports = require('next-routes')({
 
 Sacajawea, from version 2, implements a helper able to automatically generate:
 
-* `title`
 * `description`
 * `canonical`
 * `og:title`
@@ -252,12 +251,10 @@ render() {
     const { SeoComponent } = this.props
     
     return (
-    <Head>
-      <SeoComponent title=“foo” description=“bar” />
-    </Head>
-    <Head>
-      <title>baz</title>
-    </Head>  
+      <Head>
+        <title>foo</title>
+        <SeoComponent title=“foo” description=“bar” />
+      </Head>
     )
 }
 ```

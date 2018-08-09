@@ -18,6 +18,7 @@ describe('Component: Seo', () => {
       .add('home', 'it', '/', 'homepage')
       .add('home', 'de', '/', 'homepage')
       .add('home', 'fr', '/', 'homepage')
+      .add('newsDetail', 'it', '/:slug', 'newsDetail')
 
     req = mocks.createRequest({
       method: 'GET',
@@ -27,10 +28,6 @@ describe('Component: Seo', () => {
   })
 
   describe('title tags', () => {
-    test('can return component with title field', () => {
-      const result = shallow(<Seo title={'foo'} />)
-      expect(result.contains(<title>foo</title>)).toBeTruthy()
-    })
     test('can return component with og:title field', () => {
       const result = shallow(<Seo title={'foo'} />)
       expect(result.contains(<meta property="og:title" content="foo" />)).toBeTruthy()
@@ -77,41 +74,55 @@ describe('Component: Seo', () => {
 
   describe('canonical', () => {
 
-    test('can return component with canonical field', () => {
-      routes.getRequestHandler({ getRequestHandler: jest.fn(), render: jest.fn() })(req)
-      const result = shallow(<Seo req={req} />)
-      expect(result.contains(<link rel="canonical" href="https://test.com/en" />)).toBeTruthy()
-    })
+    test('can return caononical correctly', () => {
+      req = mocks.createRequest({
+        method: 'GET',
+        url: '/foo-bar'
+      })
+      res = mocks.createResponse()
 
-    test('can return component without canonical field because siteUrl is not setted', () => {
-      routes.siteUrl = ''
-      routes.getRequestHandler({ getRequestHandler: jest.fn(), render: jest.fn() })(req)
+
+      routes.getRequestHandler({ getRequestHandler: () => jest.fn(), render: jest.fn() })(req)
+
       const result = shallow(<Seo req={req} />)
-      expect(result.contains(<link rel="canonical" href="https://test.com/en" />)).toBeFalsy()
+      expect(result.contains(<link rel="canonical" href="https://test.com/foo-bar" />)).toBeTruthy()
     })
+    
+    // test('can return component with canonical field', () => {
+    //   routes.getRequestHandler({ getRequestHandler: jest.fn(), render: jest.fn() })(req)
+    //   const result = shallow(<Seo req={req} />)
+    //   expect(result.contains(<link rel="canonical" href="https://test.com/en" />)).toBeTruthy()
+    // })
+
+    // test('can return component without canonical field because siteUrl is not setted', () => {
+    //   routes.siteUrl = ''
+    //   routes.getRequestHandler({ getRequestHandler: jest.fn(), render: jest.fn() })(req)
+    //   const result = shallow(<Seo req={req} />)
+    //   expect(result.contains(<link rel="canonical" href="https://test.com/en" />)).toBeFalsy()
+    // })
 
   })
 
 
-  test('can not return hreflang if lang is once',()=> {
+  test('can not return hreflang if lang is once', () => {
     const routes = nextRoutes({ locale: 'it', siteUrl: 'https://test.com' })
-    .add('home', 'it', '/', 'homepage')
-    .add('newsDetail', 'en', '/:slug', 'newsDetail')
-    .add('newsDetail', 'it', '/:slug', 'newsDetail')
-    .add('newsDetail', 'de', '/:slug', 'newsDetail')
-    .add('newsDetail', 'fr', '/:slug', 'newsDetail')
+      .add('home', 'it', '/', 'homepage')
+      .add('newsDetail', 'en', '/:slug', 'newsDetail')
+      .add('newsDetail', 'it', '/:slug', 'newsDetail')
+      .add('newsDetail', 'de', '/:slug', 'newsDetail')
+      .add('newsDetail', 'fr', '/:slug', 'newsDetail')
 
-  req = mocks.createRequest({
-    method: 'GET',
-    url: '/'
-  })
-  res = mocks.createResponse()
+    req = mocks.createRequest({
+      method: 'GET',
+      url: '/'
+    })
+    res = mocks.createResponse()
 
 
-  routes.getRequestHandler({ getRequestHandler: ()=> jest.fn(), render: jest.fn() })(req)
+    routes.getRequestHandler({ getRequestHandler: () => jest.fn(), render: jest.fn() })(req)
 
-  const result = shallow(<Seo req={req} />)
-  expect(result.contains(<link rel="alternate" href="https://test.com/" hrefLang="it_IT"/>)).toBeFalsy()
+    const result = shallow(<Seo req={req} />)
+    expect(result.contains(<link rel="alternate" href="https://test.com/" hrefLang="it_IT" />)).toBeFalsy()
   })
 
   test('can return component with hreflang', () => {
@@ -130,8 +141,8 @@ describe('Component: Seo', () => {
 
     routes.getRequestHandler({ getRequestHandler: jest.fn(), render: jest.fn() })(req)
     const result = shallow(<Seo req={req} />)
-    expect(result.contains(<link rel="alternate" href="https://test.com/en/hello" hrefLang="en_GB"/>)).toBeTruthy()
-    expect(result.contains(<link rel="alternate" href="https://test.com/de/hello" hrefLang="de_DE"/>)).toBeTruthy()
-    expect(result.contains(<link rel="alternate" href="https://test.com/fr/hello" hrefLang="fr_FR"/>)).toBeTruthy()
+    expect(result.contains(<link rel="alternate" href="https://test.com/en/hello" hrefLang="en_GB" />)).toBeTruthy()
+    expect(result.contains(<link rel="alternate" href="https://test.com/de/hello" hrefLang="de_DE" />)).toBeTruthy()
+    expect(result.contains(<link rel="alternate" href="https://test.com/fr/hello" hrefLang="fr_FR" />)).toBeTruthy()
   })
 })
