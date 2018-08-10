@@ -11,7 +11,8 @@ class Seo extends React.Component {
     this.state = {
       title: props.title,
       description: props.description,
-      req: props.req
+      req: props.req,
+      canonicalUrl: props.canonicalUrl
     }
   }
 
@@ -43,16 +44,15 @@ class Seo extends React.Component {
     return <meta property="og:locale" content={regionalLocale} />
   }
 
-  getCanonical({ originalUrl, siteUrl}) {
-    if (!siteUrl) {
+  getCanonical(canonicalUrl) {
+    if (!canonicalUrl) {
       return null
     }
-    const url = siteUrl.endsWith('/') || originalUrl.startsWith('/') ? `${siteUrl}${originalUrl}` : `${siteUrl}/${originalUrl}`
 
     return (
       <React.Fragment>
-        <meta name="og:url" content={url} />
-        <link rel="canonical" href={url} />
+        <meta name="og:url" content={canonicalUrl} />
+        <link rel="canonical" href={canonicalUrl} />
       </React.Fragment>
     )
   }
@@ -72,7 +72,7 @@ class Seo extends React.Component {
   }
 
   render() {
-    const { title: titleMeta = '', description = '', req = {} } = this.state
+    const { title: titleMeta = '', description = '', canonicalUrl = '', req = {} } = this.state
     return (
       <React.Fragment>
         <meta property="og:title" content={titleMeta} />
@@ -80,7 +80,7 @@ class Seo extends React.Component {
 
         {this.getDescriptionTags(description)}
         {this.getOgLocale(req)}
-        {this.getCanonical(req)}
+        {this.getCanonical(canonicalUrl)}
         {this.getHrefLang(req)}
       </React.Fragment>
     )

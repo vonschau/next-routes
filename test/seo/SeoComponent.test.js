@@ -84,7 +84,7 @@ describe('Component: Seo', () => {
 
       routes.getRequestHandler({ getRequestHandler: () => jest.fn(), render: jest.fn() })(req)
 
-      const result = shallow(<Seo req={req} />)
+      const result = shallow(<Seo req={req} canonicalUrl="https://test.com/foo-bar" />)
       expect(result.contains(<link rel="canonical" href="https://test.com/foo-bar" />)).toBeTruthy()
     })
     

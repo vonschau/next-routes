@@ -31,7 +31,7 @@ describe('run sequence', () => {
     })
   })
 
-  test('can block execution middleware if an error is thrown ', () => {
+  test('can block execution if at least a middleware thrown an error ', () => {
 
     const fn1 = jest.fn((data, cb) => {
       cb(new Error("this is an error"))

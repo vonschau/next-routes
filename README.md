@@ -253,7 +253,7 @@ render() {
     return (
       <Head>
         <title>foo</title>
-        <SeoComponent title=“foo” description=“bar” />
+        <SeoComponent title=“foo” description=“bar” canonical="https://www.example.com/your-url"/>
       </Head>
     )
 }
