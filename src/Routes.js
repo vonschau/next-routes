@@ -3,11 +3,11 @@ import { parse } from 'url'
 import NextLink from 'next/link'
 import NextRouter from 'next/router'
 import Route from './Route'
-import { generateRouteFromObjectName } from './helpers/routeHelper'
+import { generateRouteFromObjectName, redirectToLocalizedHome } from './helpers/routeHelper'
 import MiddlewareManager from './middleware/MiddlewareManager'
 
 export default class Routes {
-  constructor ({ Link = NextLink, Router = NextRouter, locale, forceLocale = false, siteUrl } = {}) {
+  constructor({ Link = NextLink, Router = NextRouter, locale, forceLocale = false, siteUrl } = {}) {
     this.routes = []
     this.Link = this.getLink(Link)
     this.Router = this.getRouter(Router)
@@ -16,7 +16,7 @@ export default class Routes {
     this.siteUrl = siteUrl
   }
 
-  add (name, locale = this.locale, pattern, page, data, update = false) {
+  add(name, locale = this.locale, pattern, page, data, update = false) {
     let options
     if (name instanceof Object) {
       options = generateRouteFromObjectName(name)
@@ -52,7 +52,7 @@ export default class Routes {
     return this
   }
 
-  middleware (functions = []) {
+  middleware(functions = []) {
     if (!functions || !Array.isArray(functions)) {
       throw new Error('props must be an array')
     }
@@ -69,17 +69,17 @@ export default class Routes {
     return this
   }
 
-  setLocale (locale) {
+  setLocale(locale) {
     this.locale = locale
   }
 
-  findByName (name, locale = this.locale) {
+  findByName(name, locale = this.locale) {
     if (name) {
       return this.routes.filter(route => route.name === name && route.locale === locale)[0] || false
     }
   }
 
-  match (url) {
+  match(url) {
     const parsedUrl = parse(url, true)
     const { pathname, query } = parsedUrl
 
@@ -96,7 +96,7 @@ export default class Routes {
     }, { query, parsedUrl })
   }
 
-  findAndGetUrls (name, locale = this.locale, params = {}) {
+  findAndGetUrls(name, locale = this.locale, params = {}) {
     locale = locale || this.locale
     const route = this.findByName(name, locale)
 
@@ -107,7 +107,7 @@ export default class Routes {
     }
   }
 
-  getMultilanguageUrls (route, query) {
+  getMultilanguageUrls(route, query) {
     return this.routes.filter((r) => {
       return r.name === route.name
     }).map((r) => {
@@ -119,7 +119,7 @@ export default class Routes {
     })
   }
 
-  getRequestHandler (app, customHandler) {
+  getRequestHandler(app, customHandler) {
     const nextHandler = app.getRequestHandler()
 
     return (req, res) => {
@@ -131,33 +131,23 @@ export default class Routes {
         req.siteUrl = this.siteUrl
         req.getMultilanguageUrls = () => this.getMultilanguageUrls(route, query)
 
-        if (route.middlewares.length > 0) {
-          MiddlewareManager(route.middlewares, { req, res, route, query })((err, data) => {
-            if (err) throw err
+        MiddlewareManager(route.middlewares, { req, res, route, query })((err, data) => {
+          if (err) throw err
 
-            req.nextData = data
-          })
-          renderRoute(app, customHandler, { req, res, route, query })
-        } else {
-          renderRoute(app, customHandler, { req, res, route, query })
-        }
+          req.nextData = data
+        })
+
+        renderRoute(app, customHandler, { req, res, route, query })
       } else {
-        if (req.url === '/' && this.forceLocale) {
-          if (typeof res.redirect === 'function') {
-            res.redirect(301, `/${this.locale}`)
-          } else {
-            res.writeHead(301, {
-              'Location': `/${this.locale}`
-            })
-            res.end()
-          }
-        }
-        nextHandler(req, res, parsedUrl)
+        (req.url === '/' && this.forceLocale) ?
+          redirectToLocalizedHome(res, this.locale)
+          :
+          nextHandler(req, res, parsedUrl)
       }
     }
   }
 
-  getLink (Link) {
+  getLink(Link) {
     const LinkRoutes = props => {
       const { href, route, locale, params, ...newProps } = props
       const locale2 = locale || this.locale
@@ -186,7 +176,7 @@ export default class Routes {
     return LinkRoutes
   }
 
-  getRouter (Router) {
+  getRouter(Router) {
     const wrap = method => (route, params, locale, options) => {
       const { byName, urls: { as, href } } = this.findAndGetUrls(route, locale, params)
       return Router[method](href, as, byName ? options : params)

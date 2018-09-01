@@ -17,3 +17,11 @@ export const generateRouteFromObjectName = (routeObject = {}, defaultLocale) => 
   return { name, page, pattern, data, locale, update }
 }
 
+export const redirectToLocalizedHome = (res, locale) => {
+  if (typeof res.redirect === 'function') {
+    res.redirect(301, `/${locale}`)
+  } else {
+    res.writeHead(301, { 'Location': `/${locale}` })
+    res.end()
+  }
+}
