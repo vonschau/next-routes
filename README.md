@@ -43,10 +43,10 @@ API:
 
 Arguments:
 
-- `name` - Route name
-- `locale` - Locale of the route
-- `pattern` - Route pattern (like express, see [path-to-regexp](https://github.com/pillarjs/path-to-regexp))
-- `page` - Page inside `./pages` to be rendered; can be ommited
+- `name` - Route name (e.g. `about`)
+- `locale` - Locale of the route (e.g. `fr`)
+- `pattern` - Route pattern (e.g. `/about`; like express, see [path-to-regexp](https://github.com/pillarjs/path-to-regexp))
+- `page` - Page inside `./pages` to be rendered; can be ommited (it takes by default the route name as the page name)
 - `data` - Custom data object
 
 The page component receives the matched URL parameters merged into `query`
@@ -137,10 +137,10 @@ API:
 
 Props:
 
-- `route` - Route name or URL to match (alias: `to`)
-- `params` - Optional parameters for named routes
+- `href` - Route name to match (the name, not the pattern)
+- `params` - Optional parameters
 
-It generates the URLs for `href` and `as` and renders `next/link`. Other props like `prefetch` will work as well.
+It generates the URLs prefixed with the locale for `href` and `as` and renders `next/link`. Other props like `prefetch` will work as well.
 
 ### `Router` example
 
