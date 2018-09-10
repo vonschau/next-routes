@@ -16,6 +16,6 @@ export default Child => class extends Component {
     const { SeoComponent = React.Component } = this.props
     return (
       <Child {...this.props} SeoComponent={SeoComponent} />
-    );
+    )
   }
-};
+}

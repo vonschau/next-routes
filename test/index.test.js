@@ -1,15 +1,8 @@
 /* global jest, describe, test, expect */
-import React from 'react'
 import ReactShallowRenderer from 'react-test-renderer/shallow'
 import { Routes as nextRoutes } from '../src'
-
+import { setupRoute, setupRouterMethods } from './helpers'
 const renderer = new ReactShallowRenderer()
-
-const setupRoute = (...args) => {
-  const routes = nextRoutes({ locale: 'en' }).add(...args)
-  const route = routes.routes[routes.routes.length - 1]
-  return { routes, route }
-}
 
 describe('Routes', () => {
   const setup = (...args) => {
@@ -29,7 +22,7 @@ describe('Routes', () => {
   test('with custom Link and Router', () => {
     const CustomLink = () => <div />
     const CustomRouter = {}
-    const { Link, Router } = nextRoutes({ Link: CustomLink, Router: CustomRouter })
+    const { Link, Router } = nextRoutes({ Link: CustomLink, Router: CustomRouter }) // eslint-disable-line no-unused-vars
     expect(renderer.render(<Link href='/' />).type).toBe(CustomLink)
     expect(Router).toBe(CustomRouter)
   })
@@ -63,7 +56,7 @@ describe('Request handler', () => {
     res.end = jest.fn()
     routes.getRequestHandler(app)(req, res)
     expect(res.writeHead).toBeCalledWith(301, {
-      'Location': `/it`
+      'Location': '/it'
     })
   })
 
@@ -104,26 +97,9 @@ describe('Request handler', () => {
 const routerMethods = ['push', 'replace', 'prefetch']
 
 describe(`Router ${routerMethods.join(', ')}`, () => {
-  const setup = (...args) => {
-    const { routes, route } = setupRoute(...args)
-    const testMethods = (args, expected) => {
-      routerMethods.forEach(method => {
-        const Router = routes.getRouter({ [method]: jest.fn() })
-        Router[`${method}Route`](...args)
-        expect(Router[method]).toBeCalledWith(...expected)
-      })
-    }
-    const testException = (args) => {
-      routerMethods.forEach(method => {
-        const Router = routes.getRouter({ [method]: jest.fn() })
-        expect(() => Router[`${method}Route`](...args)).toThrow()
-      })
-    }
-    return { routes, route, testMethods, testException }
-  }
 
   test('with name and params', () => {
-    const { route, testMethods } = setup('a', 'en', '/a/:b')
+    const { route, testMethods } = setupRouterMethods(routerMethods,'a', 'en', '/a/:b')
     const { as, href } = route.getUrls({ b: 'b' })
     testMethods(['a', { b: 'b' }, 'en', {}], [href, as, {}])
   })

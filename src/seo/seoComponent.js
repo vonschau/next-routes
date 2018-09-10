@@ -2,7 +2,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import getRegionalLocale from '../helpers/getRegionalLocale';
+import getRegionalLocale from '../helpers/getRegionalLocale'
 
 class Seo extends React.Component {
 
@@ -65,7 +65,7 @@ class Seo extends React.Component {
     const urls = getMultilanguageUrls()
 
     return urls.length > 1 && urls.map(({ url, locale }, key) => {
-      const fullUrl = `${siteUrl.replace(/\/$/, "")}${url}`
+      const fullUrl = `${siteUrl.replace(/\/$/, '')}${url}`
       const regionalLocale = getRegionalLocale(locale)
       return <link rel="alternate" href={fullUrl} hrefLang={regionalLocale} key={key} />
     }) || null

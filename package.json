@@ -11,8 +11,8 @@
     "dist"
   ],
   "scripts": {
-    "lint": "standard 'src/*' 'test/*'",
-    "lint-fix": "standard --fix src/*",
+    "lint": "eslint 'src/*' 'test/*'",
+    "lint-fix": "eslint --fix src/*",
     "build": "del dist/* && babel src -d dist",
     "prepublishOnly": "npm run test",
     "pretest": "npm run lint && npm run build",
@@ -20,9 +20,6 @@
     "testOnly": "jest \\.test.js --coverage",
     "testDev": "jest \\.test.js --coverage --watchAll",
     "testCI": "npm run test && cat coverage/lcov.info | coveralls"
-  },
-  "standard": {
-    "parser": "babel-eslint"
   },
   "jest": {
     "setupTestFrameworkScriptFile": "jest-extended",
@@ -47,6 +44,8 @@
   "dependencies": {
     "async": "^2.6.1",
     "babel-polyfill": "^6.26.0",
+    "eslint": "^5.5.0",
+    "eslint-plugin-jest": "^21.22.0",
     "path-to-regexp": "^1.7.0",
     "prop-types": "^15.6.1",
     "remove-trailing-separator": "^1.1.0"
@@ -72,7 +71,6 @@
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-test-renderer": "^16.0.0",
-    "standard": "^10.0.2"
   },
   "author": "neomusic",
   "license": "MIT",

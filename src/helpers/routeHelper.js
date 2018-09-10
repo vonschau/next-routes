@@ -1,9 +1,9 @@
+
 export const generateRouteFromObjectName = (routeObject = {}, defaultLocale) => {
-  let options
-  options = routeObject
+  const options = routeObject
 
   if (!options.name) {
-    throw new Error(`Unnamed routes not supported`)
+    throw new Error('Unnamed routes not supported')
   }
 
   if (!options.page) {

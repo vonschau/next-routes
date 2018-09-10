@@ -4,8 +4,8 @@ import locales from './../config/regionalLocales'
 export default (locale = '') => {
 
   if (!locale) {
-    return ""
+    return ''
   }
 
-  return locales[locale] || ""
+  return locales[locale] || ''
 }

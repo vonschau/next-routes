@@ -2,7 +2,7 @@ import pathToRegexp from 'path-to-regexp'
 import removeTrailingSeparator from 'remove-trailing-separator'
 
 export default class Route {
-  constructor ({ name, locale, pattern, page, data, isDefaultLocale = false, forceLocale = false }) {
+  constructor({ name, locale, pattern, page, data, isDefaultLocale = false, forceLocale = false }) {
     if (!name && !page) {
       throw new Error(`Missing page to render for route "${pattern}"`)
     }
@@ -20,7 +20,7 @@ export default class Route {
     this.middlewares = []
   }
 
-  match (path) {
+  match(path) {
     if (this.forceLocale) {
       const rgx = new RegExp(`/${this.locale}(/?)`)
       if (!rgx.test(path)) {
@@ -34,31 +34,32 @@ export default class Route {
     }
   }
 
-  setMiddlewares (middlewares) {
+  setMiddlewares(middlewares) {
     this.middlewares = middlewares
   }
 
-  valuesToParams (values) {
+  valuesToParams(values) {
     return values.reduce((params, val, i) => {
+      let value = val
       if (this.keys[i].name === 'locale' && val === undefined && this.isDefaultLocale) {
-        val = this.locale
+        value = this.locale
       }
       return Object.assign(params, {
-        [this.keys[i].name]: val
+        [this.keys[i].name]: value
       })
     }, {})
   }
 
-  getHref (params = {}) {
+  getHref(params = {}) {
     return `${this.page}?${toQuerystring(params)}`
   }
 
-  getAs (params = {}) {
+  getAs(params = {}) {
     let localePath = ''
     if (this.forceLocale) {
-      localePath = '/' + this.locale
+      localePath = `/${this.locale}`
     } else {
-      localePath = !this.isDefaultLocale ? '/' + this.locale : ''
+      localePath = !this.isDefaultLocale ? `/${this.locale}` : ''
     }
     const as = removeTrailingSeparator(localePath + this.toPath(params))
     const keys = Object.keys(params)
@@ -73,7 +74,7 @@ export default class Route {
     return `${as}?${toQuerystring(qsParams)}`
   }
 
-  getUrls (params) {
+  getUrls(params) {
     const as = this.getAs(params)
     const href = this.getHref(params)
     return { as, href }

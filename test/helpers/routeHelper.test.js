@@ -6,7 +6,7 @@ describe('generateRouteFromObject()', () => {
 
     const error = () => {
       generateRouteFromObjectName(objectRoute)
-    };
+    }
 
     expect(error).toThrowError(Error)
   })

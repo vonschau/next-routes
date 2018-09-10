@@ -1,4 +1,3 @@
-import React from 'react'
 import { parse } from 'url'
 import NextLink from 'next/link'
 import NextRouter from 'next/router'
@@ -22,13 +21,10 @@ export default class Routes {
       options = generateRouteFromObjectName(name)
     } else {
       if (typeof page === 'object') {
-        data = page
-        page = name
+        options = { data: page, page: name, pattern, locale, name }
       } else {
-        page = page || name
+        options = { data, page: page || name, pattern, locale, name }
       }
-
-      options = { name, locale, pattern, page }
     }
 
     if (data) {
@@ -97,14 +93,14 @@ export default class Routes {
   }
 
   findAndGetUrls(name, locale = this.locale, params = {}) {
-    locale = locale || this.locale
-    const route = this.findByName(name, locale)
+    const locl = locale || this.locale
+    const route = this.findByName(name, locl)
 
     if (route) {
       return { route, urls: route.getUrls(params), byName: true }
-    } else {
-      throw new Error(`Route "${name}" not found`)
     }
+    throw new Error(`Route "${name}" not found`)
+
   }
 
   getMultilanguageUrls(route, query) {
@@ -138,12 +134,15 @@ export default class Routes {
         })
 
         renderRoute(app, customHandler, { req, res, route, query })
-      } else {
-        (req.url === '/' && this.forceLocale) ?
-          redirectToLocalizedHome(res, this.locale)
-          :
-          nextHandler(req, res, parsedUrl)
+        return
       }
+
+      if (req.url === '/' && this.forceLocale) {
+        redirectToLocalizedHome(res, this.locale)
+        return
+      }
+
+      nextHandler(req, res, parsedUrl)
     }
   }
 
@@ -154,12 +153,14 @@ export default class Routes {
 
       if (href) {
         const parsedUrl = parse(href)
+
         if ((parsedUrl.hostname !== null || href[0] === '/' || href[0] === '#')) {
           let propsToPass
           if (Link.propTypes) {
             const allowedKeys = Object.keys(Link.propTypes)
             propsToPass = allowedKeys.reduce((obj, key) => {
-              props.hasOwnProperty(key) && (obj[key] = props[key])
+              // @TODO remove me
+              props.hasOwnProperty(key) && (obj[key] = props[key]) // eslint-disable-line no-unused-expressions
               return obj
             }, {})
           } else {
@@ -167,6 +168,7 @@ export default class Routes {
           }
           return <Link {...propsToPass} />
         }
+
       }
 
       Object.assign(newProps, this.findAndGetUrls(route, locale2, params).urls)
