@@ -70,7 +70,7 @@
     "node-mocks-http": "^1.7.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
-    "react-test-renderer": "^16.0.0",
+    "react-test-renderer": "^16.0.0"
   },
   "author": "neomusic",
   "license": "MIT",
@@ -82,7 +82,8 @@
     "router",
     "routes",
     "routing",
-    "multi-language"
+    "multi-language",
+    "next-middleware"
   ],
   "bugs": {
     "url": "https://github.com/Palmabit-IT/Sacajawea/issues"
