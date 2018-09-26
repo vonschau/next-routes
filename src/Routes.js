@@ -1,4 +1,5 @@
 import { parse } from 'url'
+import pick from 'lodash.pick'
 import NextLink from 'next/link'
 import NextRouter from 'next/router'
 import Route from './Route'
@@ -148,32 +149,23 @@ export default class Routes {
 
   getLink(Link) {
     const LinkRoutes = props => {
-      const { href, route, locale, params, ...newProps } = props
-      const locale2 = locale || this.locale
+      const { href, locale = this.locale, route, params, ...newProps } = props
+      const { hostname } = href ? parse(href) : {}
+      const firstRef = href && href[0]
+      const mustPassProps = hostname || ['/', '#'].includes(firstRef)
+      let propsToPass
 
-      if (href) {
-        const parsedUrl = parse(href)
-
-        if ((parsedUrl.hostname !== null || href[0] === '/' || href[0] === '#')) {
-          let propsToPass
-          if (Link.propTypes) {
-            const allowedKeys = Object.keys(Link.propTypes)
-            propsToPass = allowedKeys.reduce((obj, key) => {
-              // @TODO remove me
-              props.hasOwnProperty(key) && (obj[key] = props[key]) // eslint-disable-line no-unused-expressions
-              return obj
-            }, {})
-          } else {
-            propsToPass = props
-          }
-          return <Link {...propsToPass} />
-        }
-
+      if (mustPassProps) {
+        const { propTypes } = Link
+        const ownProps = propTypes && pick(props, Object.keys(props))
+        propsToPass = propTypes ? pick(ownProps, Object.keys(propTypes)) : props
+      }
+      else {
+        const { urls } = this.findAndGetUrls(route, locale, params)
+        propsToPass = { ...newProps, ...urls }
       }
 
-      Object.assign(newProps, this.findAndGetUrls(route, locale2, params).urls)
-
-      return <Link {...newProps} />
+      return <Link {...propsToPass} />
     }
     return LinkRoutes
   }

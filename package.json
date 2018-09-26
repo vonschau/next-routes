@@ -46,6 +46,7 @@
     "babel-polyfill": "^6.26.0",
     "eslint": "^5.5.0",
     "eslint-plugin-jest": "^21.22.0",
+    "lodash.pick": "^4.4.0",
     "path-to-regexp": "^1.7.0",
     "prop-types": "^15.6.1",
     "remove-trailing-separator": "^1.1.0"
