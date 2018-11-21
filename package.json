@@ -1,64 +1,70 @@
 {
   "name": "next-routes-with-locale",
-  "version": "1.3.4",
+  "version": "2.0.0",
   "description": "Easy to use locale-based dynamic routes for Next.js",
-  "repository": "vonschau/next-routes-with-locale",
+  "repository": "",
   "main": "dist",
   "files": [
     "dist"
   ],
   "scripts": {
-    "lint": "standard 'src/*' 'test/*'",
+    "lint": "tslint -c tslint.json 'src/**/*.ts' 'src/**/*.tsx'",
+    "lint:fix": "yarn lint --fix",
     "build": "del dist/* && babel src -d dist",
     "prepublishOnly": "yarn test",
-    "pretest": "npm run lint && npm run build",
-    "test": "yarn testOnly",
-    "testOnly": "jest \\.test.js --coverage --no-cache",
-    "testCI": "yarn test && cat coverage/lcov.info | coveralls",
-    "testWatch": "yarn test --watch",
-    "dev": "concurrently -k 'npm run build -- -w' 'yarn testOnly -- --watch'"
+    "test": "jest --forceExit --no-cache --detectOpenHandles",
+    "dev": "concurrently -k 'npm run build -- -w' 'yarn testOnly -- --watch'",
+    "prettier": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "ts:check": "tsc --noEmit"
   },
-  "standard": {
-    "parser": "babel-eslint"
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "testPathIgnorePatterns": [
-      "<rootDir>/.next/",
-      "<rootDir>/node_modules/"
-    ],
-    "roots": [
-      "test/",
-      "dist/"
-    ],
-    "transform": {
-      "^.+\\.jsx?$": "babel-jest"
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn ts:check && lint-staged"
     }
   },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "tslint -c tslint.json --fix",
+      "prettier --write",
+      "git add"
+    ]
+  },
   "dependencies": {
-    "@babel/cli": "^7.0.0-beta.51",
-    "@babel/core": "^7.0.0-beta.51",
-    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.51",
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.6",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+    "@types/next": "^7.0.5",
+    "@types/react": "^16.7.6",
     "babel-core": "7.0.0-bridge.0",
-    "jest-cli": "^23.2.0",
-    "path-to-regexp": "^2.2.0"
+    "path-to-regexp": "^2.4.0",
+    "typescript": "^3.1.6"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.0.0-beta.51",
-    "babel-eslint": "^8.2.2",
-    "babel-jest": "^23.2.0",
+    "@babel/preset-env": "^7.1.6",
+    "@types/jest": "^23.3.9",
+    "@types/react-test-renderer": "^16.0.3",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^23.6.0",
     "babel-plugin-transform-define": "^1.3.0",
-    "concurrently": "^3.5.1",
-    "coveralls": "^3.0.0",
+    "concurrently": "^4.1.0",
+    "coveralls": "^3.0.2",
     "del-cli": "^1.1.0",
-    "jest": "^23.2.0",
-    "next": "^6.0.3",
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
-    "react-test-renderer": "^16.4.1",
-    "standard": "^11.0.1"
+    "husky": "^1.2.0",
+    "jest": "^23.6.0",
+    "lint-staged": "^8.1.0",
+    "next": "^7.0.2",
+    "prettier": "^1.15.2",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
+    "react-test-renderer": "^16.6.3",
+    "standard": "^12.0.1",
+    "ts-jest": "^23.10.4",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.16.0",
+    "tslint-eslint-rules": "^5.4.0",
+    "tslint-plugin-prettier": "^2.0.1"
   },
-  "author": "fridays",
+  "author": "JOIN",
   "license": "MIT",
   "keywords": [
     "next",
