@@ -12,3 +12,6 @@ coverage
 
 # JetBrains
 .idea/
+
+# VSCode
+.vscode/
