@@ -29,12 +29,12 @@
     ]
   },
   "dependencies": {
-    "@types/next": "^7.0.5",
-    "@types/react": "^16.7.6",
     "path-to-regexp": "^2.4.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.9",
+    "@types/next": "^7.0.5",
+    "@types/react": "^16.7.7",
     "@types/react-test-renderer": "^16.0.3",
     "del-cli": "^1.1.0",
     "husky": "^1.2.0",
