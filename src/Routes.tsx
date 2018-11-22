@@ -161,7 +161,6 @@ export default class Routes {
 
       if (route) {
         req.locale = route.locale
-        // req.nextRoute = route.nextRoute
 
         if (customHandler) {
           customHandler({ req, res, route, query })
@@ -198,8 +197,8 @@ export default class Routes {
     const wrap = (method: string) => (
       route: string,
       params: any,
-      locale: string | any,
-      options: any
+      locale: string | NextRouteOptions,
+      options: NextRouteOptions
     ) => {
       const locale2 = typeof locale === 'string' ? locale : this.locale
       const options2 = typeof locale === 'object' ? locale : options
