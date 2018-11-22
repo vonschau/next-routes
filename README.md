@@ -5,22 +5,22 @@ Based on [Next-Routes](https://github.com/fridays/next-routes) with these change
 - No support for unnamed routes
 - Route can be added only by name, locale and pattern (and optionally page) or options object
 - `Link` and `Router` generate URLs only by route definition (name + params)
-- URLs are prefixed with locale (ie. /en/about)
 - Routes can have data object (if you generate routes dynamically you can pass custom data there)
-- default RequestHandler set locale and nextRoute properties on request (you can get data with ```req.nextRoute.data```) 
 
 ## How to use
 
 Install:
 
 ```bash
-npm install next-routes-with-locale --save
+yarn add @join-com/next-routes-with-locale
 ```
 
 Create `routes.js` inside your project:
 
-```javascript
-const routes = module.exports = require('next-routes-with-locale')({ locale: 'en' })
+```typescript
+import nextRoutes from 'next-routes-with-locale'
+
+const routes = nextRoutes({ locale: 'en' })
 
 routes
 .add('about', 'en', '/about')
@@ -51,7 +51,7 @@ Arguments:
 
 The page component receives the matched URL parameters merged into `query`
 
-```javascript
+```typescript
 export default class Blog extends React.Component {
   static async getInitialProps ({query}) {
     // query.slug
@@ -64,7 +64,7 @@ export default class Blog extends React.Component {
 
 ## On the server
 
-```javascript
+```typescript
 // server.js
 const next = require('next')
 const routes = require('./routes')
@@ -110,7 +110,7 @@ Import `Link` and `Router` from your `routes.js` file to generate URLs based on 
 
 ### `Link` example
 
-```jsx
+```tsx
 // pages/index.js
 import {Link} from '../routes'
 
@@ -144,7 +144,7 @@ It generates the URLs for `href` and `as` and renders `next/link`. Other props l
 
 ### `Router` example
 
-```jsx
+```tsx
 // pages/blog.js
 import React from 'react'
 import {Router} from '../routes'
@@ -183,17 +183,6 @@ Arguments:
 The same works with `.replaceRoute()` and `.prefetchRoute()`
 
 It generates the URLs and calls `next/router`
-
----
-
-Optionally you can provide custom `Link` and `Router` objects, for example:
-
-```javascript
-const routes = module.exports = require('next-routes')({
-  Link: require('./my/link')
-  Router: require('./my/router')
-})
-```
 
 ---
 
