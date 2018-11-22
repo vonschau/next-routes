@@ -12,13 +12,14 @@
     "lint": "tslint -c tslint.json 'src/**/*.ts' 'src/**/*.tsx'",
     "lint:fix": "yarn lint --fix",
     "build": "del lib/* && tsc -p tsconfig.build.json",
+    "prebuild": "yarn lint && yarn test",
     "test": "jest --forceExit --no-cache --detectOpenHandles",
     "prettier": "prettier --write \"src/**/*.{ts,tsx}\"",
     "ts:check": "tsc --noEmit"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn ts:check && lint-staged"
+      "pre-commit": "yarn ts:check && lint-staged && yarn build && git add ."
     }
   },
   "lint-staged": {
