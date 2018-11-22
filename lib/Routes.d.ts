@@ -2,10 +2,14 @@ import NextLink, { LinkProps } from 'next/link';
 import NextRouter, { SingletonRouter } from 'next/router';
 import * as React from 'react';
 import Route from './Route';
+interface NextRouteOptions {
+    shallow: boolean;
+}
+declare type FnType = (route: string, params?: any, locale?: string | NextRouteOptions, options?: NextRouteOptions) => void;
 declare type RouterType = typeof NextRouter & {
-    pushRoute: (route: string, params?: any, locale?: string | any, options?: any) => void;
-    replaceRoute: (route: string, params?: any, locale?: string | any, options?: any) => void;
-    prefetchRoute: (route: string, params?: any, locale?: string | any, options?: any) => void;
+    pushRoute: FnType;
+    replaceRoute: FnType;
+    prefetchRoute: FnType;
 };
 interface ExtendedLinkProps extends LinkProps {
     route: string;

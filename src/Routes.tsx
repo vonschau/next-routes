@@ -5,25 +5,21 @@ import { parse } from 'url'
 
 import Route from './Route'
 
+interface NextRouteOptions {
+  shallow: boolean
+}
+
+type FnType = (
+  route: string,
+  params?: any,
+  locale?: string | NextRouteOptions,
+  options?: NextRouteOptions
+) => void
+
 type RouterType = typeof NextRouter & {
-  pushRoute: (
-    route: string,
-    params?: any,
-    locale?: string | any,
-    options?: any
-  ) => void
-  replaceRoute: (
-    route: string,
-    params?: any,
-    locale?: string | any,
-    options?: any
-  ) => void
-  prefetchRoute: (
-    route: string,
-    params?: any,
-    locale?: string | any,
-    options?: any
-  ) => void
+  pushRoute: FnType
+  replaceRoute: FnType
+  prefetchRoute: FnType
 }
 
 interface ExtendedLinkProps extends LinkProps {
