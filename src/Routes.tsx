@@ -12,7 +12,7 @@ interface NextRouteOptions {
 type FnType = (
   route: string,
   params?: any,
-  locale?: string | NextRouteOptions,
+  localeOrOptions?: string | NextRouteOptions,
   options?: NextRouteOptions
 ) => void
 
@@ -58,7 +58,7 @@ export default class Routes {
   }
 
   public add(
-    name: string | Option,
+    name: string,
     locale: string = this.locale,
     pattern: string,
     page: string,

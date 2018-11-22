@@ -5,7 +5,7 @@ import Route from './Route';
 interface NextRouteOptions {
     shallow: boolean;
 }
-declare type FnType = (route: string, params?: any, locale?: string | NextRouteOptions, options?: NextRouteOptions) => void;
+declare type FnType = (route: string, params?: any, localeOrOptions?: string | NextRouteOptions, options?: NextRouteOptions) => void;
 declare type RouterType = typeof NextRouter & {
     pushRoute: FnType;
     replaceRoute: FnType;
@@ -23,20 +23,13 @@ interface ConstructorProps {
     Router?: any;
     locale: string;
 }
-interface Option {
-    name: string;
-    page: string;
-    locale: string;
-    pattern: string;
-    data?: any;
-}
 export default class Routes {
     routes: Route[];
     Link: LinkType;
     Router: RouterType;
     locale: string;
     constructor({ locale }: ConstructorProps);
-    add(name: string | Option, locale: string | undefined, pattern: string, page: string, data?: any): this;
+    add(name: string, locale: string | undefined, pattern: string, page: string, data?: any): this;
     setLocale(locale: string): void;
     findByName(name: string, locale?: string): Route | undefined;
     match(url: string): {
