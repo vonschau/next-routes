@@ -1,2 +1,2 @@
-declare const _default: (obj: any) => string
-export default _default
+declare const _default: (obj: any) => string;
+export default _default;

@@ -1,85 +1,62 @@
-import NextLink from 'next/link'
-import NextRouter from 'next/router'
-import * as React from 'react'
-import Route from './Route'
+import NextLink, { LinkProps } from 'next/link';
+import NextRouter, { SingletonRouter } from 'next/router';
+import * as React from 'react';
+import Route from './Route';
+interface NextRouteOptions {
+    shallow: boolean;
+}
+declare type FnType = (route: string, params?: any, localeOrOptions?: string | NextRouteOptions, options?: NextRouteOptions) => void;
 declare type RouterType = typeof NextRouter & {
-  pushRoute: (route: string, params: any, locale: string, options: any) => void
-  replaceRoute: (
-    route: string,
-    params: any,
-    locale: string,
-    options: any
-  ) => void
-  prefetchRoute: (
-    route: string,
-    params: any,
-    locale: string,
-    options: any
-  ) => void
+    pushRoute: FnType;
+    replaceRoute: FnType;
+    prefetchRoute: FnType;
+};
+interface ExtendedLinkProps extends LinkProps {
+    route: string;
+    locale?: string;
+    to?: string;
+    params?: any;
 }
+declare type LinkType = React.SFC<ExtendedLinkProps>;
 interface ConstructorProps {
-  Link?: any
-  Router?: any
-  locale: string
-}
-interface Option {
-  name: string
-  page: string
-  locale: string
-  pattern: string
-  data?: any
+    Link?: any;
+    Router?: any;
+    locale: string;
 }
 export default class Routes {
-  public routes: Route[]
-  public Link: React.ReactNode
-  public Router: RouterType
-  public locale: string
-  constructor({ Link, Router, locale }: ConstructorProps)
-  public add(
-    name: string | Option,
-    locale: string | undefined,
-    pattern: string,
-    page: string,
-    data?: any
-  ): this
-  public setLocale(locale: string): void
-  public findByName(name: string, locale?: string): Route | undefined
-  public match(
-    url: string
-  ): {
-    query: any
-    route?: Route | undefined
-    params?: any
-    parsedUrl: any
-  }
-  public findAndGetUrls(
-    nameOrUrl: string,
-    locale: string,
-    params: any
-  ):
-    | {
-        foundRoute: Route
+    routes: Route[];
+    Link: LinkType;
+    Router: RouterType;
+    locale: string;
+    constructor({ locale }: ConstructorProps);
+    add(name: string, locale: string | undefined, pattern: string, page: string, data?: any): this;
+    setLocale(locale: string): void;
+    findByName(name: string, locale?: string): Route | undefined;
+    match(url: string): {
+        query: any;
+        route?: Route | undefined;
+        params?: any;
+        parsedUrl: any;
+    };
+    findAndGetUrls(nameOrUrl: string, locale: string, params: any): {
+        foundRoute: Route;
         urls: {
-          as: string
-          href: string
-        }
-        byName: boolean
-        route?: undefined
-      }
-    | {
-        route: Route | undefined
+            as: string;
+            href: string;
+        };
+        byName: boolean;
+        route?: undefined;
+    } | {
+        route: Route | undefined;
         urls: {
-          href: string
-          as: string
-        }
-        foundRoute?: undefined
-        byName?: undefined
-      }
-  public getRequestHandler(
-    app: any,
-    customHandler?: any
-  ): (req: any, res: any) => void
-  public getLink(Link: typeof NextLink): (props: any) => JSX.Element
-  public getRouter(Router: RouterType): RouterType
+            href: string;
+            as: string;
+        };
+        foundRoute?: undefined;
+        byName?: undefined;
+    };
+    getRequestHandler(app: any, customHandler?: any): (req: any, res: any) => void;
+    getLink(Link: typeof NextLink): React.FunctionComponent<ExtendedLinkProps>;
+    getRouter(Router: SingletonRouter): RouterType;
 }
-export {}
+export {};

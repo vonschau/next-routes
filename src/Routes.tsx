@@ -1,25 +1,34 @@
-import NextLink from 'next/link'
-import NextRouter from 'next/router'
+import NextLink, { LinkProps } from 'next/link'
+import NextRouter, { SingletonRouter } from 'next/router'
 import * as React from 'react'
 import { parse } from 'url'
 
 import Route from './Route'
 
-type RouterType = typeof NextRouter & {
-  pushRoute: (route: string, params: any, locale: string, options: any) => void
-  replaceRoute: (
-    route: string,
-    params: any,
-    locale: string,
-    options: any
-  ) => void
-  prefetchRoute: (
-    route: string,
-    params: any,
-    locale: string,
-    options: any
-  ) => void
+interface NextRouteOptions {
+  shallow: boolean
 }
+
+type FnType = (
+  route: string,
+  params?: any,
+  localeOrOptions?: string | NextRouteOptions,
+  options?: NextRouteOptions
+) => void
+
+type RouterType = typeof NextRouter & {
+  pushRoute: FnType
+  replaceRoute: FnType
+  prefetchRoute: FnType
+}
+
+interface ExtendedLinkProps extends LinkProps {
+  route: string
+  locale?: string
+  to?: string
+  params?: any
+}
+type LinkType = React.SFC<ExtendedLinkProps>
 
 interface ConstructorProps {
   Link?: any
@@ -37,23 +46,19 @@ interface Option {
 
 export default class Routes {
   public routes: Route[]
-  public Link: React.ReactNode
+  public Link: LinkType
   public Router: RouterType
   public locale: string
 
-  constructor({
-    Link = NextLink,
-    Router = NextRouter,
-    locale
-  }: ConstructorProps) {
+  constructor({ locale }: ConstructorProps) {
     this.routes = []
-    this.Link = this.getLink(Link)
-    this.Router = this.getRouter(Router) as RouterType
+    this.Link = this.getLink(NextLink)
+    this.Router = this.getRouter(NextRouter)
     this.locale = locale
   }
 
   public add(
-    name: string | Option,
+    name: string,
     locale: string = this.locale,
     pattern: string,
     page: string,
@@ -156,7 +161,6 @@ export default class Routes {
 
       if (route) {
         req.locale = route.locale
-        // req.nextRoute = route.nextRoute
 
         if (customHandler) {
           customHandler({ req, res, route, query })
@@ -170,7 +174,7 @@ export default class Routes {
   }
 
   public getLink(Link: typeof NextLink) {
-    const LinkRoutes = (props: any) => {
+    const LinkRoutes: React.SFC<ExtendedLinkProps> = props => {
       const { route, params, locale, to, ...newProps } = props
       const nameOrUrl = route || to
 
@@ -189,12 +193,12 @@ export default class Routes {
     return LinkRoutes
   }
 
-  public getRouter(Router: RouterType) {
+  public getRouter(Router: SingletonRouter): RouterType {
     const wrap = (method: string) => (
       route: string,
       params: any,
-      locale: string,
-      options: any
+      locale: string | NextRouteOptions,
+      options: NextRouteOptions
     ) => {
       const locale2 = typeof locale === 'string' ? locale : this.locale
       const options2 = typeof locale === 'object' ? locale : options
@@ -206,10 +210,11 @@ export default class Routes {
       return Router[method](href, as, byName ? options2 : params)
     }
 
-    Router.pushRoute = wrap('push')
-    Router.replaceRoute = wrap('replace')
-    Router.prefetchRoute = wrap('prefetch')
-
-    return Router
+    return {
+      ...Router,
+      pushRoute: wrap('push'),
+      replaceRoute: wrap('replace'),
+      prefetchRoute: wrap('prefetch')
+    }
   }
 }
