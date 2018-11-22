@@ -43,7 +43,7 @@ export default class Routes {
     data?: any
   ): this
   public setLocale(locale: string): void
-  public findByName(name: string, locale: string): Route | undefined
+  public findByName(name: string, locale?: string): Route | undefined
   public match(
     url: string
   ): {

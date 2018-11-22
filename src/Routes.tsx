@@ -100,7 +100,8 @@ export default class Routes {
     this.locale = locale
   }
 
-  public findByName(name: string, locale: string) {
+  public findByName(name: string, locale?: string) {
+    locale = locale || this.locale
     if (name) {
       return this.routes.filter(
         route => route.name === name && route.locale === locale
