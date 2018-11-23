@@ -1,6 +1,6 @@
 {
   "name": "@join-com/next-routes-with-locale",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Easy to use locale-based dynamic routes for Next.js",
   "repository": "",
   "main": "lib/index.js",
@@ -23,7 +23,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn ts:check && lint-staged"
+      "pre-commit": "yarn ts:check && lint-staged && yarn test"
     }
   },
   "lint-staged": {
