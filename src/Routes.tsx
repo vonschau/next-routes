@@ -16,7 +16,7 @@ type FnType = (
   options?: NextRouteOptions
 ) => void
 
-type RouterType = typeof NextRouter & {
+interface RouterType extends SingletonRouter {
   pushRoute: FnType
   replaceRoute: FnType
   prefetchRoute: FnType
@@ -53,7 +53,7 @@ export default class Routes {
   constructor({ locale }: ConstructorProps) {
     this.routes = []
     this.Link = this.getLink(NextLink)
-    this.Router = this.getRouter(NextRouter)
+    this.Router = this.getRouter(NextRouter as RouterType)
     this.locale = locale
   }
 
@@ -193,7 +193,7 @@ export default class Routes {
     return LinkRoutes
   }
 
-  public getRouter(Router: SingletonRouter): RouterType {
+  public getRouter(Router: RouterType) {
     const wrap = (method: string) => (
       route: string,
       params: any,
@@ -210,11 +210,10 @@ export default class Routes {
       return Router[method](href, as, byName ? options2 : params)
     }
 
-    return {
-      ...Router,
-      pushRoute: wrap('push'),
-      replaceRoute: wrap('replace'),
-      prefetchRoute: wrap('prefetch')
-    }
+    Router.pushRoute = wrap('push')
+    Router.replaceRoute = wrap('replace')
+    Router.prefetchRoute = wrap('prefetch')
+
+    return Router
   }
 }
