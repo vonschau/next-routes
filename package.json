@@ -1,6 +1,6 @@
 {
   "name": "@join-com/next-routes-with-locale",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Easy to use locale-based dynamic routes for Next.js",
   "repository": "",
   "main": "lib/index.js",
