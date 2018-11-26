@@ -3,7 +3,7 @@ import NextRouter, { SingletonRouter } from 'next/router'
 import * as React from 'react'
 import { parse } from 'url'
 
-import Route from './Route'
+import Route, { Options as RouteOptions } from './Route'
 
 interface NextRouteOptions {
   shallow: boolean
@@ -36,14 +36,6 @@ interface ConstructorProps {
   locale: string
 }
 
-interface Option {
-  name: string
-  page: string
-  locale: string
-  pattern: string
-  data?: any
-}
-
 export default class Routes {
   public routes: Route[]
   public Link: LinkType
@@ -61,43 +53,19 @@ export default class Routes {
     name: string,
     locale: string = this.locale,
     pattern: string,
-    page: string,
-    data?: any
+    page: string | RouteOptions,
+    options?: RouteOptions
   ) {
-    let options: Option
-    if (typeof name === 'object') {
-      options = name
-
-      if (!options.name) {
-        throw new Error('Unnamed routes not supported')
-      }
-
-      name = options.name
-
-      if (!options.page) {
-        options.page = options.name
-      }
-
-      locale = options.locale || this.locale
-    } else {
-      if (typeof page === 'object') {
-        data = page
-        page = name
-      } else {
-        page = page || name
-      }
-
-      options = { name, locale, pattern, page }
-
-      if (data) {
-        options.data = data
-      }
+    if (typeof page === 'object') {
+      options = page
+      page = name
     }
+    const routeParams = { name, locale, pattern, page: page || name, options }
 
     if (this.findByName(name, locale)) {
       throw new Error(`Route "${name}" already exists`)
     }
-    this.routes.push(new Route(options))
+    this.routes.push(new Route(routeParams))
     return this
   }
 

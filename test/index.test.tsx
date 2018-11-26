@@ -18,26 +18,6 @@ describe('Routes', () => {
     return { routes, route, testRoute }
   }
 
-  test('add with object', () => {
-    setup({ name: 'a', locale: 'en' }).testRoute({
-      name: 'a',
-      locale: 'en',
-      pattern: '/a',
-      page: '/a'
-    })
-  })
-
-  test('add with object and data', () => {
-    const data = { contentItemId: 'test' }
-    setup({ name: 'a', locale: 'en', data }).testRoute({
-      name: 'a',
-      locale: 'en',
-      pattern: '/a',
-      page: '/a',
-      data
-    })
-  })
-
   test('add with name and pattern', () => {
     setup('a', 'en', '/:a').testRoute({
       name: 'a',
@@ -47,14 +27,14 @@ describe('Routes', () => {
     })
   })
 
-  test('add with name, pattern and data', () => {
-    const data = { contentItemId: 'test' }
-    setup('a', 'en', '/:a', data).testRoute({
+  test('add with name, pattern and options', () => {
+    const options = { subdomain: true }
+    setup('a', 'en', '/:a', options).testRoute({
       name: 'a',
       locale: 'en',
       pattern: '/:a',
       page: '/a',
-      data
+      options
     })
   })
 
@@ -67,14 +47,14 @@ describe('Routes', () => {
     })
   })
 
-  test('add with name, pattern,page and data', () => {
-    const data = { contentItemId: 'test' }
-    setup('a', 'en', '/:a', 'b', data).testRoute({
+  test('add with name, pattern,page and options', () => {
+    const options = { subdomain: true }
+    setup('a', 'en', '/:a', 'b', options).testRoute({
       name: 'a',
       locale: 'en',
       pattern: '/:a',
       page: '/b',
-      data
+      options
     })
   })
 

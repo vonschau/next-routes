@@ -2,12 +2,17 @@ import * as pathToRegexp from 'path-to-regexp'
 
 import toQuerystring from './utils/toQuerystring'
 
-interface Option {
+export interface Options {
+  subdomain?: boolean
+  locale?: string
+}
+
+interface RouteProps {
   name: string
   page: string
   locale: string
   pattern: string
-  data?: any
+  options?: Options
 }
 
 export default class Route {
@@ -19,9 +24,9 @@ export default class Route {
   public keys: Array<{ name: string }>
   public keyNames: string[]
   public toPath: pathToRegexp.PathFunction
-  public data: object
+  public options: Options
 
-  constructor({ name, locale, pattern, page, data }: Option) {
+  constructor({ name, locale, pattern, page, options }: RouteProps) {
     if (!name && !page) {
       throw new Error(`Missing page to render for route "${pattern}"`)
     }
@@ -33,7 +38,7 @@ export default class Route {
     this.regex = pathToRegexp(this.pattern, (this.keys = []))
     this.keyNames = this.keys.map(key => key.name)
     this.toPath = pathToRegexp.compile(this.pattern)
-    this.data = data || {}
+    this.options = options || {}
   }
 
   public match(path: string) {
