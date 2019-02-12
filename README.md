@@ -189,7 +189,7 @@ It generates the URLs and calls `next/router`
 Optionally you can provide custom `Link` and `Router` objects, for example:
 
 ```javascript
-const routes = module.exports = require('next-routes')({
+const routes = module.exports = require('next-routes-with-locale')({
   Link: require('./my/link')
   Router: require('./my/router')
 })
