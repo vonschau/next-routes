@@ -27,7 +27,6 @@
     ]
   },
   "dependencies": {
-    "eslint-config-standard-jsx": "^6.0.2",
     "path-to-regexp": "^3.0.0"
   },
   "peerDependencies": {
@@ -45,6 +44,7 @@
     "del-cli": "^2.0.0",
     "eslint": "^5.0.0",
     "eslint-config-standard": "^12.0.0",
+    "eslint-config-standard-jsx": "^6.0.2",
     "eslint-plugin-import": "^2.0.0",
     "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-promise": "^4.1.0",
