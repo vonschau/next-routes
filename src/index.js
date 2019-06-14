@@ -108,6 +108,10 @@ class Routes {
         return result
       }
 
+      Object.keys(params).forEach((key) => {
+        params[key] = decodeURIComponent(params[key])
+      })
+
       return { ...result, route, params, query: { ...query, ...params, nextRoute: route.name } }
     }, { query, parsedUrl })
   }
