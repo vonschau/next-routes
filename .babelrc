@@ -1,6 +1,13 @@
 {
   "presets": [
-    "env",
-    "next/babel"
+    ["next/babel", {
+      "preset-env": {
+        "targets": {
+          "browsers": ["> 1%", "ie >= 11"]
+        },
+        "useBuiltIns": "usage",
+        "modules": "commonjs"
+      }
+    }]
   ]
 }
