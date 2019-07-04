@@ -1,13 +1,15 @@
 {
   "presets": [
-    ["next/babel", {
-      "preset-env": {
-        "targets": {
-          "browsers": ["> 1%", "ie >= 11"]
-        },
-        "useBuiltIns": "usage",
-        "modules": "commonjs"
-      }
+    "@babel/preset-react",
+    ["@babel/preset-env", {
+      "useBuiltIns": "usage", // or "entry"
+      "corejs": 3,
     }]
+  ],
+  "plugins": [
+    ["@babel/transform-runtime", {
+      "corejs": 3,
+    }],
+    "@babel/plugin-proposal-class-properties",
   ]
 }
