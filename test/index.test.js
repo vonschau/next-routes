@@ -188,12 +188,12 @@ describe('Link', () => {
 
   test('with filtered params', () => {
     const { testLink } = setup('a', 'en', '/a/:b')
-    testLink({ href: 'a', params: { b: 'b' } }, { as: '/en/a/b', href: '/a?b=b&nextRoute=a' })
+    testLink({ href: 'a', params: { b: 'b' } }, { as: '/en/a/b', href: '/a?b=b&nextRoute=a', prefetch: false })
   })
 
   test('with name and params', () => {
     const { route, testLink } = setup('a', 'en', '/a/:b')
-    testLink({ href: 'a', locale: 'en', params: { b: 'b' } }, route.getUrls({ b: 'b' }))
+    testLink({ href: 'a', locale: 'en', params: { b: 'b' } }, { ...route.getUrls({ b: 'b' }), prefetch: false })
   })
   /*
     test('with route not found', () => {

@@ -21,7 +21,7 @@ class Routes {
     this.hideDefaultLocale = hideDefaultLocale
   }
 
-  add (name, locale = this.locale, pattern, page, data, update = false) {
+  add (name, locale = this.locale, pattern, page, data, update = false, prefetch = false) {
     let options
     if (name instanceof Object) {
       options = name
@@ -46,7 +46,7 @@ class Routes {
         page = page || name
       }
 
-      options = { name, locale, pattern, page }
+      options = { name, locale, pattern, page, prefetch }
 
       if (data) {
         options.data = data
@@ -153,6 +153,7 @@ class Routes {
     const LinkRoutes = props => {
       const { href, locale, params, ...newProps } = props
       const locale2 = locale || this.locale
+      const prefetch = props.prefetch || false
       const parsedUrl = parse(href)
 
       if (parsedUrl.hostname !== null || href[0] === '/' || href[0] === '#') {
@@ -169,7 +170,9 @@ class Routes {
         return <Link {...propsToPass} />
       }
 
+      newProps.prefetch = prefetch
       Object.assign(newProps, this.findAndGetUrls(href, locale2, params).urls)
+
       return <Link {...newProps} />
     }
     return LinkRoutes
@@ -189,7 +192,7 @@ class Routes {
 }
 
 class Route {
-  constructor ({ name, locale, pattern, page, data, hideLocale }) {
+  constructor ({ name, locale, pattern, page, data, hideLocale, prefetch }) {
     if (!name && !page) {
       throw new Error(`Missing page to render for route "${pattern}"`)
     }
@@ -203,6 +206,7 @@ class Route {
     this.toPath = pathToRegexp.compile(this.pattern)
     this.data = data || {}
     this.hideLocale = hideLocale || false
+    this.prefetch = prefetch || false
   }
 
   match (path) {
