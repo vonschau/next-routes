@@ -1,8 +1,8 @@
-import pathToRegexp from 'path-to-regexp'
+import { pathToRegexp, compile } from 'path-to-regexp'
 import React from 'react'
-import { parse } from 'url'
 import NextLink from 'next/link'
 import NextRouter from 'next/router'
+import { URL } from 'url'
 
 module.exports = opts => new Routes(opts)
 
@@ -27,7 +27,7 @@ class Routes {
       options = name
 
       if (!options.name) {
-        throw new Error(`Unnamed routes not supported`)
+        throw new Error('Unnamed routes not supported')
       }
 
       name = options.name
@@ -94,8 +94,12 @@ class Routes {
   }
 
   match (url) {
-    const parsedUrl = parse(url, true)
-    const { pathname, query } = parsedUrl
+    const parsedUrl = new URL(url, url.indexOf('//') === -1 ? 'http://localhost' : undefined)
+    const { pathname, searchParams } = parsedUrl
+    const query = {}
+    for (const [key, value] of searchParams.entries()) {
+      query[key] = value
+    }
 
     return this.routes.reduce((result, route) => {
       if (result.route) {
@@ -150,18 +154,17 @@ class Routes {
   }
 
   getLink (Link) {
-    const LinkRoutes = props => {
+    return props => {
       const { href, locale, params, ...newProps } = props
       const locale2 = locale || this.locale
       const prefetch = props.prefetch || false
-      const parsedUrl = parse(href)
 
-      if (parsedUrl.hostname !== null || href[0] === '/' || href[0] === '#') {
+      if (href.indexOf('//') !== -1 || href[0] === '/' || href[0] === '#') {
         let propsToPass
         if (Link.propTypes) {
           const allowedKeys = Object.keys(Link.propTypes)
           propsToPass = allowedKeys.reduce((obj, key) => {
-            props.hasOwnProperty(key) && (obj[key] = props[key])
+            Object.prototype.hasOwnProperty.call(props, key) && (obj[key] = props[key])
             return obj
           }, {})
         } else {
@@ -175,7 +178,6 @@ class Routes {
 
       return <Link {...newProps} />
     }
-    return LinkRoutes
   }
 
   getRouter (Router) {
@@ -203,7 +205,7 @@ class Route {
     this.page = page.replace(/(^|\/)homepage/, '').replace(/^\/?/, '/')
     this.regex = pathToRegexp(this.pattern, this.keys = [])
     this.keyNames = this.keys.map(key => key.name)
-    this.toPath = pathToRegexp.compile(this.pattern)
+    this.toPath = compile(this.pattern)
     this.data = data || {}
     this.hideLocale = hideLocale || false
     this.prefetch = prefetch || false
