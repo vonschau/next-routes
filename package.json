@@ -1,6 +1,6 @@
 {
   "name": "next-routes-with-locale",
-  "version": "1.8.2",
+  "version": "1.8.3",
   "description": "Easy to use locale-based dynamic routes for Next.js",
   "repository": "vonschau/next-routes-with-locale",
   "main": "dist",
@@ -27,10 +27,10 @@
     ]
   },
   "dependencies": {
+    "@babel/runtime-corejs3": "^7.12.5",
     "path-to-regexp": "^6.2.0"
   },
   "peerDependencies": {
-    "@babel/runtime-corejs3": "^7.12.5",
     "next": "^10.0.2",
     "react": "^17.0.1"
   },
