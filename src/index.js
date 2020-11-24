@@ -116,7 +116,12 @@ class Routes {
         params[key] = decodeURIComponent(params[key])
       })
 
-      return { ...result, route, params, query: { ...query, ...params, nextRoute: route.name } }
+      return {
+        ...result,
+        route,
+        params,
+        query: { ...query, ...params, nextRoute: route.name, __nextLocale: route.locale }
+      }
     }, { query, parsedUrl })
   }
 
