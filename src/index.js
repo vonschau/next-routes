@@ -141,6 +141,7 @@ class Routes {
       if (route) {
         req.locale = route.locale
         req.nextRoute = route
+        query.__nextLocale = route.locale
 
         if (customHandler) {
           customHandler({ req, res, route, query })
