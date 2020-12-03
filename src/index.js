@@ -11,7 +11,8 @@ class Routes {
     Link = NextLink,
     Router = NextRouter,
     locale,
-    hideDefaultLocale = false
+    hideDefaultLocale = false,
+    hideLocalePrefix = false,
   } = {}) {
     this.routes = []
     this.Link = this.getLink(Link)
@@ -19,6 +20,7 @@ class Routes {
     this.locale = locale
     this.defaultLocale = locale
     this.hideDefaultLocale = hideDefaultLocale
+    this.hideLocalePrefix = hideLocalePrefix
   }
 
   add (name, locale = this.locale, pattern, page, data, update = false, prefetch = false) {
@@ -53,7 +55,8 @@ class Routes {
       }
     }
 
-    options.hideLocale = !!this.hideDefaultLocale && options.locale === this.defaultLocale
+    options.hideLocale = (!!this.hideDefaultLocale && options.locale === this.defaultLocale)
+      || this.hideLocalePrefix
 
     if (this.findByName(name, locale)) {
       if (update) {
