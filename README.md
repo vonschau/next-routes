@@ -5,7 +5,7 @@ Based on [Next-Routes](https://github.com/fridays/next-routes) with these change
 - No support for unnamed routes
 - Route can be added only by name, locale and pattern (and optionally page) or options object
 - `Link` and `Router` generate URLs only by route definition (name + params)
-- URLs are prefixed with locale (ie. /en/about)
+- URLs are prefixed with locale (ie. /en/about). This feature is optional
 - Routes can have data object (if you generate routes dynamically you can pass custom data there)
 - default RequestHandler set locale and nextRoute properties on request (you can get data with ```req.nextRoute.data```) 
 
@@ -20,18 +20,31 @@ npm install next-routes-with-locale --save
 Create `routes.js` inside your project:
 
 ```javascript
-const routes = module.exports = require('next-routes-with-locale')({ locale: 'en' })
+import RoutesWithLocale from 'next-routes-with-locale';
+
+const options = {
+  Link,                       // optional Link, uses next/link by default
+  Router,                     // optional Router, uses next/router by default
+  locale: 'en',               // Locale
+  defaultLocale: 'en',        // Default locale
+  hideDefaultLocale: false,   // hide locale prefix when default is detected
+  hideLocalePrefix: false,    // hide all locale prefixes
+}
+
+const routes = RoutesWithLocale(options);
 
 routes
-.add('about', 'en', '/about')
-.add('blog', 'en', '/blog/:slug')
-.add('blog', 'en', '/blog/:slug', {myCustom: 'data'})
-.add('user', 'en', '/user/:id', 'profile', {myCustom: 'data'})
-.add({name: 'beta', locale: 'en', pattern: '/v3', page: 'v3'})
-.add('about', 'cs', '/o-projektu')
-.add('blog', 'cs', '/blog/:slug')
-.add('user', 'cs', '/uzivatel/:id', 'profile')
-.add({name: 'beta', locale: 'cs', pattern: '/v3', page: 'v3'})
+  .add('about', 'en', '/about')
+  .add('blog', 'en', '/blog/:slug')
+  .add('blog', 'en', '/blog/:slug', {myCustom: 'data'})
+  .add('user', 'en', '/user/:id', 'profile', {myCustom: 'data'})
+  .add({name: 'beta', locale: 'en', pattern: '/v3', page: 'v3'})
+  .add('about', 'cs', '/o-projektu')
+  .add('blog', 'cs', '/blog/:slug')
+  .add('user', 'cs', '/uzivatel/:id', 'profile')
+  .add({name: 'beta', locale: 'cs', pattern: '/v3', page: 'v3'})
+
+export default routes;
 ```
 
 This file is used both on the server and the client.
